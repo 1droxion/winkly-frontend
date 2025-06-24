@@ -1,0 +1,99 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #121212, #1e1e1e);
+  color: white;
+  overflow-x: hidden;
+}
+
+.upgrade-page {
+  padding: 2rem;
+  text-align: center;
+  min-height: 100vh;
+}
+
+.upgrade-title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.upgrade-subtitle {
+  font-size: 1.2rem;
+  color: #ccc;
+  margin-bottom: 2rem;
+}
+
+.plans-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.plan-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 260px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
+  transition: 0.3s ease;
+}
+
+.plan-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.plan-card h2 {
+  margin-bottom: 0.5rem;
+}
+
+.plan-card p {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: gold;
+}
+
+.plan-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  text-align: left;
+}
+
+.plan-card ul li {
+  padding: 4px 0;
+  font-size: 0.95rem;
+}
+
+.plan-card button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  background: gold;
+  color: black;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.plan-card button:hover {
+  background: #ffd700;
+}
+
+.vip-button {
+  background: linear-gradient(to right, #ffb347, #ffcc33);
+}
+
+.back-home {
+  margin-top: 2rem;
+  display: inline-block;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.back-home:hover {
+  color: white;
+}
