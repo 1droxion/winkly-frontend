@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import "./App.css";
 
 const BACKEND_URL = "https://backend-winkly.onrender.com";
 
@@ -20,15 +21,13 @@ export default function App() {
 
   const handleConnect = async () => {
     if (!isVIP && (gender !== "any" || country !== "any")) {
-      alert("This filter is VIP only. Upgrade to unlock!");
+      alert("VIP required to use filters.");
       return;
     }
-
     if (coins <= 0) {
-      alert("Out of coins! Please buy more.");
+      alert("Out of coins! Buy more to continue.");
       return;
     }
-
     const res = await fetch(`${BACKEND_URL}/match`);
     const data = await res.json();
     if (data?.matched) {
@@ -42,80 +41,45 @@ export default function App() {
   };
 
   const handleBuyVIP = () => {
-    alert("Redirecting to Stripe (mock)...");
+    alert("Stripe checkout coming soon...");
     setIsVIP(true);
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.logo}>Winkly 🚀</h1>
+    <div className="app">
+      <video ref={localVideoRef} autoPlay muted className="background-video" />
 
-      <video ref={localVideoRef} autoPlay muted style={styles.video} />
+      <div className="glass-ui">
+        <h1 className="logo">Winkly 🚀</h1>
 
-      <div style={styles.filters}>
-        <select value={gender} onChange={(e) => setGender(e.target.value)} disabled={!isVIP}>
-          <option value="any">Any Gender</option>
-          <option value="boy">Boy</option>
-          <option value="girl">Girl</option>
-        </select>
-        <select value={country} onChange={(e) => setCountry(e.target.value)} disabled={!isVIP}>
-          <option value="any">Any Country</option>
-          <option value="us">🇺🇸 USA</option>
-          <option value="in">🇮🇳 India</option>
-          <option value="br">🇧🇷 Brazil</option>
-        </select>
-        {!isVIP && <button onClick={handleBuyVIP}>🔓 Unlock Filters</button>}
+        <div className="coin-bar">
+          💰 Coins: {coins} {isVIP && <span className="vip">👑 VIP</span>}
+        </div>
+
+        <div className="video-frame">
+          <video ref={localVideoRef} autoPlay muted className="webcam-preview" />
+        </div>
+
+        <div className="filter-bar">
+          <select value={gender} onChange={(e) => setGender(e.target.value)} disabled={!isVIP}>
+            <option value="any">Any</option>
+            <option value="boy">Boy</option>
+            <option value="girl">Girl</option>
+          </select>
+          <select value={country} onChange={(e) => setCountry(e.target.value)} disabled={!isVIP}>
+            <option value="any">Any</option>
+            <option value="us">🇺🇸 USA</option>
+            <option value="in">🇮🇳 India</option>
+            <option value="br">🇧🇷 Brazil</option>
+          </select>
+          {!isVIP && <button className="vip-btn" onClick={handleBuyVIP}>🔓 Unlock Filters</button>}
+        </div>
+
+        <div className="btn-group">
+          <button onClick={handleConnect}>🔄 Connect</button>
+          <button onClick={handleSkip}>⏭️ Skip</button>
+        </div>
       </div>
-
-      <div style={styles.controls}>
-        <button onClick={handleConnect} style={styles.button}>🔄 Connect</button>
-        <button onClick={handleSkip} style={styles.button}>⏭️ Skip</button>
-      </div>
-
-      <p style={styles.coins}>💰 Coins: {coins} {isVIP && " 👑 VIP"}</p>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    textAlign: "center",
-    background: "#000",
-    height: "100vh",
-    color: "#fff",
-    padding: "20px",
-  },
-  logo: {
-    fontSize: "2rem",
-  },
-  video: {
-    width: "60%",
-    maxHeight: "60vh",
-    borderRadius: "20px",
-    marginTop: "20px",
-  },
-  filters: {
-    marginTop: "15px",
-    display: "flex",
-    justifyContent: "center",
-    gap: "10px",
-    alignItems: "center",
-  },
-  controls: {
-    marginTop: "20px",
-  },
-  button: {
-    margin: "10px",
-    padding: "12px 24px",
-    fontSize: "1rem",
-    borderRadius: "10px",
-    backgroundColor: "#222",
-    color: "#fff",
-    border: "1px solid #444",
-    cursor: "pointer",
-  },
-  coins: {
-    marginTop: "20px",
-    fontSize: "1.1rem",
-  },
-};
