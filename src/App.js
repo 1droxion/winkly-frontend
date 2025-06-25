@@ -1,18 +1,21 @@
-// === App.jsx final connect logic with real match ===
+// === App.jsx with sidebar + room redirect ===
 import React, { useEffect, useRef, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 import Login from "./Login";
 import Profile from "./Profile";
 import Admin from "./Admin";
 import Discover from "./Discover";
+import Room from "./Room";
 
-export default function App() {
+function MainApp() {
   const localVideoRef = useRef(null);
   const [connected, setConnected] = useState(false);
   const [user, setUser] = useState(null);
   const [gender, setGender] = useState("Any Gender");
   const [country, setCountry] = useState("Any Country");
   const [view, setView] = useState("app");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const saved = localStorage.getItem("winkly_user");
@@ -47,17 +50,6 @@ export default function App() {
     </div>
   );
 
-  const BottomNav = () => (
-    <div className="nav-bar">
-      <button onClick={() => setView("app")}>🏠</button>
-      <button onClick={() => setView("discover")}>💃</button>
-      <button onClick={() => setView("plans")}>💎</button>
-      <button onClick={() => setView("profile")}>👤</button>
-    </div>
-  );
-
-  const handleSkip = () => setConnected(false);
-
   const handleConnect = async () => {
     if (!user) return alert("Please login first.");
     if (user.guest) return alert("Guest users can only connect once. Please register.");
@@ -78,8 +70,9 @@ export default function App() {
       });
       const data = await res.json();
       if (data.matched) {
-        alert("🎉 Matched with someone!");
-        setConnected(true);
+        const roomId = Math.random().toString(36).substring(7);
+        alert("🎉 Matched! Redirecting to room...");
+        navigate(`/room/${roomId}`);
       } else {
         alert("⏳ Waiting for someone to join...");
       }
@@ -88,21 +81,30 @@ export default function App() {
     }
   };
 
+  const Sidebar = () => (
+    <div className="sidebar">
+      <button onClick={() => setView("app")}>🏠 Home</button>
+      <button onClick={() => setView("discover")}>💃 Discover</button>
+      <button onClick={() => setView("plans")}>💎 Plans</button>
+      <button onClick={() => setView("profile")}>👤 Profile</button>
+      <button onClick={() => setView("admin")}>📊 Admin</button>
+    </div>
+  );
+
   if (!user) return <Login onLogin={(u) => { setUser(u); setView("app"); }} />;
-  if (view === "admin") return <Admin />;
-  if (view === "discover") return <><Discover /><BottomNav /></>;
-  if (view === "plans") return <><Plans /><BottomNav /></>;
-  if (view === "profile") return <><Profile user={user} onLogout={() => { setUser(null); localStorage.removeItem("winkly_user"); setView("login"); }}><button onClick={() => setView("admin")}>📊 Admin</button></Profile><BottomNav /></>;
+  if (view === "admin") return <><Admin /><Sidebar /></>;
+  if (view === "discover") return <><Discover /><Sidebar /></>;
+  if (view === "plans") return <><Plans /><Sidebar /></>;
+  if (view === "profile") return <><Profile user={user} onLogout={() => { setUser(null); localStorage.removeItem("winkly_user"); setView("login"); }}><button onClick={() => setView("admin")}>📊 Admin</button></Profile><Sidebar /></>;
 
   return (
     <div className="app">
+      <Sidebar />
       <h1 className="logo">Winkly ✯</h1>
       <div className="coin-bar">
         💰 Coins: {user.coins}
         {user.vip && <span className="vip">👑 VIP</span>}
-        <button onClick={() => setView("profile")} style={{ marginLeft: "auto", background: "none", color: "#fff", border: "none", cursor: "pointer" }}>⚙️ Profile</button>
       </div>
-
       <div className="video-frame">
         <video ref={localVideoRef} autoPlay muted className="webcam-preview" />
         {!connected && <span>🎥 Your Video Preview</span>}
@@ -132,10 +134,19 @@ export default function App() {
 
       <div className="btn-group">
         <button onClick={handleConnect}>🔄 Connect</button>
-        <button onClick={handleSkip}>⏭️ Skip</button>
+        <button onClick={() => setConnected(false)}>⏭️ Skip</button>
       </div>
-
-      <BottomNav />
     </div>
+  );
+}
+
+export default function Wrapper() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/room/:roomId" element={<Room />} />
+        <Route path="/*" element={<MainApp />} />
+      </Routes>
+    </Router>
   );
 }
