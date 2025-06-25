@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Login from "./Login";
 import Profile from "./Profile";
+import Admin from "./Admin";
 import axios from "axios";
 
 export default function App() {
@@ -10,7 +11,7 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [gender, setGender] = useState("Any Gender");
   const [country, setCountry] = useState("Any Country");
-  const [view, setView] = useState("app"); // 'login' | 'profile' | 'app'
+  const [view, setView] = useState("app"); // 'login' | 'profile' | 'app' | 'admin'
 
   useEffect(() => {
     const saved = localStorage.getItem("winkly_user");
@@ -62,7 +63,19 @@ export default function App() {
   };
 
   if (!user) return <Login onLogin={(u) => { setUser(u); setView("app"); }} />;
-  if (view === "profile") return <Profile user={user} onLogout={() => { setUser(null); localStorage.removeItem("winkly_user"); }} />;
+  if (view === "profile") return (
+    <Profile
+      user={user}
+      onLogout={() => {
+        setUser(null);
+        localStorage.removeItem("winkly_user");
+        setView("login");
+      }}
+    >
+      <button onClick={() => setView("admin")}>📊 Admin</button>
+    </Profile>
+  );
+  if (view === "admin") return <Admin />;
 
   return (
     <div className="app">
