@@ -5,8 +5,8 @@ export default function App() {
   const localVideoRef = useRef(null);
   const [connected, setConnected] = useState(false);
   const [coins, setCoins] = useState(0);
-  const [gender, setGender] = useState("any");
-  const [country, setCountry] = useState("any");
+  const [gender, setGender] = useState("Any Gender");
+  const [country, setCountry] = useState("Any Country");
   const [isVIP, setIsVIP] = useState(false);
 
   useEffect(() => {
@@ -16,7 +16,6 @@ export default function App() {
       }
     });
 
-    // Check VIP status
     fetch("https://droxion-backend.onrender.com/check-vip")
       .then((res) => res.json())
       .then((data) => {
@@ -26,7 +25,6 @@ export default function App() {
         }
       });
 
-    // Load coins
     fetch("https://droxion-backend.onrender.com/get-coins")
       .then((res) => res.json())
       .then((data) => {
@@ -35,7 +33,7 @@ export default function App() {
   }, []);
 
   const handleConnect = async () => {
-    if (!isVIP && (gender !== "any" || country !== "any")) {
+    if (!isVIP && (gender !== "Any Gender" || country !== "Any Country")) {
       alert("VIP only! Buy VIP Access to use filters.");
       return;
     }
@@ -73,18 +71,23 @@ export default function App() {
       </div>
 
       <div className="filter-bar">
-        <select value={gender} onChange={(e) => setGender(e.target.value)} disabled={!isVIP}>
-          <option value="any">Any Gender</option>
-          <option value="boy">Boy</option>
-          <option value="girl">Girl</option>
-        </select>
-
-        <select value={country} onChange={(e) => setCountry(e.target.value)} disabled={!isVIP}>
-          <option value="any">Any Country</option>
-          <option value="us">🇺🇸 USA</option>
-          <option value="in">🇮🇳 India</option>
-          <option value="br">🇧🇷 Brazil</option>
-        </select>
+        <div className="custom-dropdown">
+          <button className="dropdown-btn">{gender}</button>
+          <div className="dropdown-list">
+            <div onClick={() => setGender("Any Gender")}>Any Gender</div>
+            <div onClick={() => setGender("Boy")}>Boy</div>
+            <div onClick={() => setGender("Girl")}>Girl</div>
+          </div>
+        </div>
+        <div className="custom-dropdown">
+          <button className="dropdown-btn">{country}</button>
+          <div className="dropdown-list">
+            <div onClick={() => setCountry("Any Country")}>Any Country</div>
+            <div onClick={() => setCountry("🇺🇸 USA")}>🇺🇸 USA</div>
+            <div onClick={() => setCountry("🇮🇳 India")}>🇮🇳 India</div>
+            <div onClick={() => setCountry("🇧🇷 Brazil")}>🇧🇷 Brazil</div>
+          </div>
+        </div>
       </div>
 
       {!isVIP && (
@@ -94,12 +97,7 @@ export default function App() {
       )}
 
       <div className="btn-group">
-        <button
-          onClick={handleConnect}
-          disabled={coins <= 0}
-        >
-          🔄 Connect
-        </button>
+        <button onClick={handleConnect} disabled={coins <= 0}>🔄 Connect</button>
         <button onClick={handleSkip}>⏭️ Skip</button>
       </div>
 
