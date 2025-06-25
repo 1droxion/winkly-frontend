@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 export default function App() {
   const localVideoRef = useRef(null);
   const [connected, setConnected] = useState(false);
-  const [coins, setCoins] = useState(5);
+  const [coins, setCoins] = useState(0);
   const [gender, setGender] = useState("any");
   const [country, setCountry] = useState("any");
   const [isVIP, setIsVIP] = useState(false);
@@ -17,6 +17,20 @@ export default function App() {
         localVideoRef.current.srcObject = stream;
       }
     });
+
+    // Check VIP status
+    fetch("https://droxion-backend.onrender.com/check-vip")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.isVIP) setIsVIP(true);
+      });
+
+    // Load coins
+    fetch("https://droxion-backend.onrender.com/get-coins")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.coins !== undefined) setCoins(data.coins);
+      });
   }, []);
 
   const handleConnect = async () => {
@@ -52,7 +66,7 @@ export default function App() {
               <video ref={localVideoRef} autoPlay muted className="background-video" />
 
               <div className="glass-ui">
-                <h1 className="logo">Winkly 💫</h1>
+                <h1 className="logo">Winkly ✫</h1>
 
                 <div className="coin-bar">
                   💰 Coins: {coins} {isVIP && <span className="vip">👑 VIP</span>}
@@ -91,13 +105,25 @@ export default function App() {
                 <div style={{ marginTop: "2rem" }}>
                   <h3>Buy More Coins 💸</h3>
                   <div className="btn-group">
-                    <a href="https://buy.stripe.com/14AaEX0vr3NidTX0SS97G03" target="_blank" rel="noopener noreferrer">
+                    <a
+                      href="https://buy.stripe.com/14AaEX0vr3NidTX0SS97G03"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <button>5 Coins – $1.99</button>
                     </a>
-                    <a href="https://buy.stripe.com/aFa7sL91X83y17bfNM97G04" target="_blank" rel="noopener noreferrer">
+                    <a
+                      href="https://buy.stripe.com/aFa7sL91X83y17bfNM97G04"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <button>20 Coins – $5</button>
                     </a>
-                    <a href="https://buy.stripe.com/14AfZh0vrbfK3fj8lk97G05" target="_blank" rel="noopener noreferrer">
+                    <a
+                      href="https://buy.stripe.com/14AfZh0vrbfK3fj8lk97G05"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <button>50 Coins – $9.99</button>
                     </a>
                   </div>
