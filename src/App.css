@@ -3,19 +3,24 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
-  background: radial-gradient(circle at top left, #1e1e2f, #111);
+  background: linear-gradient(to right top, #1a1a2e, #16213e);
   color: white;
   overflow-x: hidden;
   min-height: 100vh;
 }
 
 .app {
-  text-align: center;
-  padding: 3rem 1rem;
+  padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(8px);
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.3);
+  max-width: 400px;
+  margin: 2rem auto;
 }
 
 .video-frame {
@@ -23,8 +28,7 @@ body {
   height: 200px;
   background: rgba(255, 255, 255, 0.07);
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.15);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -34,12 +38,11 @@ body {
 }
 
 .logo {
-  font-size: 2.8rem;
+  font-size: 2.6rem;
   font-weight: bold;
   background: linear-gradient(to right, #ffcc70, #ffaaee);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 0.5rem;
 }
 
 .coin-bar {
@@ -61,7 +64,6 @@ body {
   font-weight: bold;
 }
 
-/* === Custom Dropdown === */
 .custom-dropdown {
   position: relative;
   display: inline-block;
@@ -69,15 +71,15 @@ body {
 }
 
 .dropdown-btn {
-  background: #292929;
+  background: #2e2e3a;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 20px;
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 1rem;
   min-width: 160px;
-  box-shadow: 0 0 8px rgba(255,255,255,0.1);
+  box-shadow: 0 0 10px rgba(255,255,255,0.05);
 }
 
 .dropdown-list {
@@ -85,10 +87,10 @@ body {
   position: absolute;
   background-color: #1f1f1f;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(255,255,255,0.1);
+  box-shadow: 0 0 20px rgba(255,255,255,0.1);
   padding: 10px 0;
   min-width: 160px;
-  z-index: 1;
+  z-index: 10;
   text-align: center;
   margin-top: 10px;
 }
@@ -108,7 +110,6 @@ body {
   background-color: #333;
 }
 
-/* === VIP Button === */
 .vip-btn {
   padding: 14px 30px;
   font-size: 1.05rem;
@@ -118,19 +119,18 @@ body {
   border: none;
   border-radius: 999px;
   cursor: pointer;
-  margin: 0.5rem 0 1.5rem;
+  margin: 1rem 0;
   transition: transform 0.2s ease, box-shadow 0.3s;
   animation: pulse 2s infinite;
-  box-shadow: 0 0 10px gold;
+  box-shadow: 0 0 20px gold;
 }
 
 @keyframes pulse {
   0% { box-shadow: 0 0 0px gold; }
-  50% { box-shadow: 0 0 20px gold; }
+  50% { box-shadow: 0 0 30px gold; }
   100% { box-shadow: 0 0 0px gold; }
 }
 
-/* === Button Group === */
 .btn-group {
   display: flex;
   justify-content: center;
@@ -151,6 +151,7 @@ body {
 .btn-group button:nth-child(1) {
   background-color: #24c26c;
   color: white;
+  box-shadow: 0 0 10px rgba(36,194,108,0.5);
 }
 
 .btn-group button:nth-child(1):hover {
@@ -160,6 +161,7 @@ body {
 .btn-group button:nth-child(2) {
   background-color: #3478f6;
   color: white;
+  box-shadow: 0 0 10px rgba(52,120,246,0.5);
 }
 
 .btn-group button:nth-child(2):hover {
@@ -178,20 +180,14 @@ h3 {
   color: #eee;
 }
 
-/* === Responsive === */
 @media (max-width: 600px) {
   .app {
     padding: 1.5rem;
+    max-width: 90%;
   }
-
   .video-frame {
-    width: 90%;
+    width: 100%;
   }
-
-  .coin-bar {
-    font-size: 0.95rem;
-  }
-
   .btn-group {
     flex-direction: column;
     gap: 0.8rem;
