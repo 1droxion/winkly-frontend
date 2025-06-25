@@ -1,9 +1,9 @@
+// === App.jsx ===
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Login from "./Login";
 import Profile from "./Profile";
 import Admin from "./Admin";
-import axios from "axios";
 
 export default function App() {
   const localVideoRef = useRef(null);
@@ -11,7 +11,7 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [gender, setGender] = useState("Any Gender");
   const [country, setCountry] = useState("Any Country");
-  const [view, setView] = useState("app"); // 'login' | 'profile' | 'app' | 'admin'
+  const [view, setView] = useState("app");
 
   useEffect(() => {
     const saved = localStorage.getItem("winkly_user");
@@ -19,7 +19,6 @@ export default function App() {
       const parsed = JSON.parse(saved);
       setUser(parsed);
     }
-
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
       if (localVideoRef.current) {
         localVideoRef.current.srcObject = stream;
@@ -28,27 +27,21 @@ export default function App() {
   }, []);
 
   const handleConnect = async () => {
-    if (!user) {
-      alert("Please login first.");
-      return;
-    }
-
+    if (!user) return alert("Please login first.");
+    if (user.guest) return alert("Guest users can only connect once. Please register to continue.");
     if (!user.vip && (gender !== "Any Gender" || country !== "Any Country")) {
       alert("VIP only! Buy VIP Access to use filters.");
       return;
     }
-
     if (user.coins <= 0) {
       alert("You are out of coins. Please buy more.");
       return;
     }
-
     const res = await fetch("https://backend-winkly.onrender.com/match", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ gender, country }),
     });
-
     const data = await res.json();
     if (data?.matched) {
       setConnected(true);
@@ -58,25 +51,16 @@ export default function App() {
     }
   };
 
-  const handleSkip = () => {
-    setConnected(false);
-  };
-
   const sendGift = async (type) => {
     if (!user) return alert("Login first.");
+    if (user.guest) return alert("Guests can't send gifts. Please register.");
     if (!connected) return alert("You must be in a chat.");
-    const to = "girl@example.com"; // Replace this with matched user's email
-
+    const to = "girl@example.com";
     const res = await fetch("https://winkly-backend.onrender.com/send-gift", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from: user.email,
-        to: to,
-        gift: type
-      }),
+      body: JSON.stringify({ from: user.email, to, gift: type }),
     });
-
     const data = await res.json();
     if (data.error) {
       alert(data.error);
@@ -88,19 +72,19 @@ export default function App() {
     }
   };
 
+  const handleGenderSelect = (value) => {
+    setGender(value);
+    if (value === "Girl" && (!user?.vip && user?.coins <= 0)) {
+      setTimeout(() => {
+        alert("To connect with girls, please buy coins or VIP access.");
+      }, 300);
+    }
+  };
+
+  const handleSkip = () => setConnected(false);
+
   if (!user) return <Login onLogin={(u) => { setUser(u); setView("app"); }} />;
-  if (view === "profile") return (
-    <Profile
-      user={user}
-      onLogout={() => {
-        setUser(null);
-        localStorage.removeItem("winkly_user");
-        setView("login");
-      }}
-    >
-      <button onClick={() => setView("admin")}>📊 Admin</button>
-    </Profile>
-  );
+  if (view === "profile") return <Profile user={user} onLogout={() => { setUser(null); localStorage.removeItem("winkly_user"); setView("login"); }}><button onClick={() => setView("admin")}>📊 Admin</button></Profile>;
   if (view === "admin") return <Admin />;
 
   return (
@@ -109,9 +93,7 @@ export default function App() {
       <div className="coin-bar">
         💰 Coins: {user.coins}
         {user.vip && <span className="vip">👑 VIP</span>}
-        <button onClick={() => setView("profile")} style={{ marginLeft: "auto", background: "none", color: "#fff", border: "none", cursor: "pointer" }}>
-          ⚙️ Profile
-        </button>
+        <button onClick={() => setView("profile")} style={{ marginLeft: "auto", background: "none", color: "#fff", border: "none", cursor: "pointer" }}>⚙️ Profile</button>
       </div>
 
       <div className="video-frame">
@@ -125,7 +107,7 @@ export default function App() {
           <div className="dropdown-list">
             <div onClick={() => setGender("Any Gender")}>Any Gender</div>
             <div onClick={() => setGender("Boy")}>Boy</div>
-            <div onClick={() => setGender("Girl")}>Girl</div>
+            <div onClick={() => handleGenderSelect("Girl")}>Girl</div>
           </div>
         </div>
         <div className="custom-dropdown">
@@ -152,7 +134,7 @@ export default function App() {
         <button onClick={handleSkip}>⏭️ Skip</button>
       </div>
 
-      {connected && (
+      {connected && !user.guest && (
         <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
           <h3>🎁 Send a Gift</h3>
           <div className="btn-group">
