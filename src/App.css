@@ -11,28 +11,22 @@ body {
 
 .app {
   text-align: center;
-  padding: 2rem;
+  padding: 3rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   min-height: 100vh;
-  background-size: cover;
-  background-position: center;
 }
 
 /* === Video === */
-.background-video, .webcam-preview {
-  display: none;
-}
-
 .video-frame {
-  width: 260px;
-  height: 180px;
+  width: 300px;
+  height: 200px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  margin: 0 auto 1rem auto;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,7 +36,7 @@ body {
 
 /* === Logo === */
 .logo {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: bold;
   background: linear-gradient(to right, #ffcc70, #ffaaee);
   -webkit-background-clip: text;
@@ -53,7 +47,7 @@ body {
 /* === Coin + VIP bar === */
 .coin-bar {
   background: rgba(255, 255, 255, 0.08);
-  padding: 8px 20px;
+  padding: 10px 28px;
   border-radius: 999px;
   font-weight: 600;
   font-size: 1rem;
@@ -76,31 +70,34 @@ body {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .filter-bar select {
-  padding: 10px;
-  border-radius: 10px;
+  padding: 12px 20px;
+  border-radius: 999px;
   border: none;
-  background: #222;
+  background: #292929;
   color: white;
-  font-size: 0.9rem;
+  font-size: 1rem;
   outline: none;
-  box-shadow: 0 0 4px rgba(255,255,255,0.1);
+  min-width: 160px;
+  box-shadow: 0 0 6px rgba(255,255,255,0.1);
+  appearance: none;
+  text-align: center;
 }
 
 /* === VIP Button === */
 .vip-btn {
-  padding: 12px 22px;
-  font-size: 1rem;
+  padding: 14px 30px;
+  font-size: 1.05rem;
   background: gold;
   color: black;
   font-weight: bold;
   border: none;
-  border-radius: 12px;
+  border-radius: 999px;
   cursor: pointer;
-  margin-bottom: 1.5rem;
+  margin: 0.5rem 0 1.5rem;
   transition: transform 0.2s ease;
   animation: pulse 2s infinite;
 }
@@ -125,19 +122,19 @@ body {
 }
 
 .btn-group button {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 10px;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.1);
   color: white;
-  font-size: 0.95rem;
+  font-size: 1rem;
   cursor: pointer;
-  backdrop-filter: blur(4px);
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.2s;
 }
 
 .btn-group button:hover {
   background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
 }
 
 .btn-group button:disabled {
@@ -149,8 +146,8 @@ body {
 /* === Coin Shop Title === */
 h3 {
   margin-top: 2rem;
-  font-size: 1.3rem;
-  color: #ccc;
+  font-size: 1.4rem;
+  color: #eee;
 }
 
 /* === Responsive === */
@@ -166,6 +163,14 @@ h3 {
   }
 
   .app {
-    padding: 1rem;
+    padding: 1.5rem;
+  }
+
+  .video-frame {
+    width: 90%;
+  }
+
+  .coin-bar {
+    font-size: 0.95rem;
   }
 }
