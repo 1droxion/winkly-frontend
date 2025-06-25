@@ -3,7 +3,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Poppins', sans-serif;
-  background: linear-gradient(to bottom right, #0f0f0f, #1a1a1a);
+  background: linear-gradient(135deg, #141e30, #243b55);
+  background-attachment: fixed;
   color: white;
   overflow-x: hidden;
 }
@@ -137,6 +138,12 @@ body {
 
 .btn-group button:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-group button:disabled {
+  background: rgba(100, 100, 100, 0.3);
+  color: #888;
+  cursor: not-allowed;
 }
 
 /* === Coin Shop Title === */
