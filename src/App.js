@@ -86,6 +86,8 @@ export default function App() {
             <div onClick={() => setCountry("🇺🇸 USA")}>🇺🇸 USA</div>
             <div onClick={() => setCountry("🇮🇳 India")}>🇮🇳 India</div>
             <div onClick={() => setCountry("🇧🇷 Brazil")}>🇧🇷 Brazil</div>
+            <div onClick={() => setCountry("🇷🇺 Russia")}>🇷🇺 Russia</div>
+            <div onClick={() => setCountry("🇲🇽 Mexico")}>🇲🇽 Mexico</div>
           </div>
         </div>
       </div>
