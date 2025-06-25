@@ -1,4 +1,4 @@
-// === App.jsx cleaned homepage ===
+// === App.jsx final connect logic with real match ===
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Login from "./Login";
@@ -58,6 +58,36 @@ export default function App() {
 
   const handleSkip = () => setConnected(false);
 
+  const handleConnect = async () => {
+    if (!user) return alert("Please login first.");
+    if (user.guest) return alert("Guest users can only connect once. Please register.");
+    if (!user.vip && (gender !== "Any Gender" || country !== "Any Country")) {
+      alert("VIP only! Buy VIP Access to use filters.");
+      return;
+    }
+    if (user.coins <= 0) {
+      alert("You are out of coins. Please buy more.");
+      return;
+    }
+
+    try {
+      const res = await fetch("https://winkly-backend.onrender.com/match", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gender, country })
+      });
+      const data = await res.json();
+      if (data.matched) {
+        alert("🎉 Matched with someone!");
+        setConnected(true);
+      } else {
+        alert("⏳ Waiting for someone to join...");
+      }
+    } catch (err) {
+      alert("❌ Match failed.");
+    }
+  };
+
   if (!user) return <Login onLogin={(u) => { setUser(u); setView("app"); }} />;
   if (view === "admin") return <Admin />;
   if (view === "discover") return <><Discover /><BottomNav /></>;
@@ -101,7 +131,7 @@ export default function App() {
       </div>
 
       <div className="btn-group">
-        <button onClick={() => alert("Match feature coming soon")}>🔄 Connect</button>
+        <button onClick={handleConnect}>🔄 Connect</button>
         <button onClick={handleSkip}>⏭️ Skip</button>
       </div>
 
