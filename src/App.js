@@ -62,6 +62,32 @@ export default function App() {
     setConnected(false);
   };
 
+  const sendGift = async (type) => {
+    if (!user) return alert("Login first.");
+    if (!connected) return alert("You must be in a chat.");
+    const to = "girl@example.com"; // Replace this with matched user's email
+
+    const res = await fetch("https://winkly-backend.onrender.com/send-gift", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: user.email,
+        to: to,
+        gift: type
+      }),
+    });
+
+    const data = await res.json();
+    if (data.error) {
+      alert(data.error);
+    } else {
+      alert(data.message);
+      const updated = { ...user, coins: data.coins_left };
+      setUser(updated);
+      localStorage.setItem("winkly_user", JSON.stringify(updated));
+    }
+  };
+
   if (!user) return <Login onLogin={(u) => { setUser(u); setView("app"); }} />;
   if (view === "profile") return (
     <Profile
@@ -125,6 +151,17 @@ export default function App() {
         <button onClick={handleConnect} disabled={!user || user.coins <= 0}>🔄 Connect</button>
         <button onClick={handleSkip}>⏭️ Skip</button>
       </div>
+
+      {connected && (
+        <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
+          <h3>🎁 Send a Gift</h3>
+          <div className="btn-group">
+            <button onClick={() => sendGift("rose")}>🌹 Rose (1)</button>
+            <button onClick={() => sendGift("heart")}>❤️ Heart (3)</button>
+            <button onClick={() => sendGift("diamond")}>💎 Diamond (5)</button>
+          </div>
+        </div>
+      )}
 
       <div style={{ marginTop: "2rem" }}>
         <h3>Buy More Coins 💸</h3>
