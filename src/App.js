@@ -1,4 +1,4 @@
-// === App.jsx with bottom nav and view switch ===
+// === App.jsx cleaned homepage ===
 import React, { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Login from "./Login";
@@ -99,12 +99,6 @@ export default function App() {
           </div>
         </div>
       </div>
-
-      {!user.vip && (
-        <a href="https://buy.stripe.com/dRm3cvemh4Rm9DH9po97G06" target="_blank" rel="noopener noreferrer">
-          <button className="vip-btn">🔓 Unlock VIP Filters ($19.99)</button>
-        </a>
-      )}
 
       <div className="btn-group">
         <button onClick={() => alert("Match feature coming soon")}>🔄 Connect</button>
