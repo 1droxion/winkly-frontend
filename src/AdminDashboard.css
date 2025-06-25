@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #0e0e0e;
+  color: white;
+}
+
+.admin-dashboard {
+  padding: 2rem;
+  text-align: center;
+}
+
+.admin-dashboard h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(to right, #ffcc70, #ffaaee);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.admin-summary {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+.admin-summary div {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  overflow: hidden;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+thead {
+  background: #202020;
+}
+
+thead th {
+  padding: 12px;
+  text-align: left;
+  color: #f0f0f0;
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+tbody td {
+  padding: 10px;
+  color: #ccc;
+}
+
+@media (max-width: 768px) {
+  .admin-summary {
+    flex-direction: column;
+    align-items: center;
+  }
+}
