@@ -1,22 +1,15 @@
 {
-  "name": "Winkly - Video Chat App",
   "short_name": "Winkly",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#1a1a2e",
-  "theme_color": "#ffcc70",
-  "orientation": "portrait",
-  "description": "Random video calls, VIP filters, gifts & more!",
+  "name": "Winkly Live Video",
   "icons": [
     {
-      "src": "/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
     }
-  ]
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000"
 }
