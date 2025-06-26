@@ -20,10 +20,10 @@ function App() {
   const [country, setCountry] = useState("any");
   const [bot, setBot] = useState(null);
 
-  const email = "user@example.com"; // replace this with real login session later
+  const email = "user@example.com"; // Replace with session user
 
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true })
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then(() => setCameraAllowed(true))
       .catch(() => setCameraAllowed(false));
 
@@ -34,8 +34,9 @@ function App() {
 
   const handleConnect = () => {
     if (!user) return;
+
     if (!user.vip && user.coins <= 0) {
-      alert("❌ You need more coins. Please upgrade or buy more.");
+      alert("❌ You need more coins. Please upgrade.");
       return;
     }
 
@@ -46,7 +47,8 @@ function App() {
       }).then(res => setUser({ ...user, coins: res.data.coins }));
     }
 
-    window.open("https://winkly-call.vercel.app/room", "_blank");
+    const callURL = `https://winkly-call.vercel.app/room?gender=${gender}&country=${country}`;
+    window.open(callURL, "_blank");
   };
 
   const handleSkip = () => {
@@ -78,12 +80,12 @@ function App() {
 
       <h1>Winkly ★</h1>
       {user && (
-        <p>💰 Coins: {user.coins} {user.vip && "(VIP 💫)"}</p>
+        <p>💰 Coins: {user.coins} {user.vip && "(VIP 👑 Unlimited)"}</p>
       )}
 
       <div className="video-box">
         {cameraAllowed === false ? (
-          <p className="error">🛘 Camera access denied</p>
+          <p className="error">🚫 Camera access denied</p>
         ) : (
           <video autoPlay muted playsInline className="preview"></video>
         )}
