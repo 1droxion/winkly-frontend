@@ -8,14 +8,15 @@ export default function Room() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const videoRef = useRef();
+  const [cameraAllowed, setCameraAllowed] = useState(null);
 
-  // Simulate webcam stream
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then(stream => {
         videoRef.current.srcObject = stream;
+        setCameraAllowed(true);
       })
-      .catch(() => alert("Camera access denied"));
+      .catch(() => setCameraAllowed(false));
   }, []);
 
   const handleSend = () => {
@@ -28,13 +29,17 @@ export default function Room() {
     <div style={{ padding: 20, textAlign: "center", background: "#000", color: "#fff", minHeight: "100vh" }}>
       <h2>Matched with: <span style={{ color: "#ffcc70" }}>{gender.toUpperCase()} from {country.toUpperCase()}</span></h2>
 
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        playsInline
-        style={{ width: "80%", maxWidth: 600, borderRadius: 16, border: "3px solid #ffcc70" }}
-      ></video>
+      {cameraAllowed === false ? (
+        <p style={{ color: "red", marginBottom: 20 }}>🚫 Camera access denied. Please allow camera access in your browser settings.</p>
+      ) : (
+        <video
+          ref={videoRef}
+          autoPlay
+          muted
+          playsInline
+          style={{ width: "80%", maxWidth: 600, borderRadius: 16, border: "3px solid #ffcc70" }}
+        ></video>
+      )}
 
       <div style={{ marginTop: 20 }}>
         <div
