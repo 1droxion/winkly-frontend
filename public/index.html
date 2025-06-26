@@ -7,29 +7,30 @@
 
     <title>Winkly - Video Chat App</title>
 
-    <!-- Manifest & Icons -->
+    <!-- Poppins Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Manifest + Icons -->
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" href="/icon-192x192.png" />
     <link rel="apple-touch-icon" href="/icon-512x512.png" sizes="512x512" />
 
-    <!-- Theme -->
+    <!-- PWA Theme -->
     <meta name="theme-color" content="#ffcc70" />
     <meta name="background-color" content="#1a1a2e" />
+    <meta name="description" content="Random video chat with filters and coins - Winkly" />
 
-    <!-- Cache Control -->
+    <!-- Force fresh build -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   </head>
 
   <body>
-    <noscript>You need to enable JavaScript to run Winkly.</noscript>
+    <noscript>Enable JavaScript to use Winkly.</noscript>
     <div id="root"></div>
 
-    <!-- VIP Unlocked Popup -->
+    <!-- VIP Unlock Popup -->
     <div id="vip-popup" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
       background: gold; color: black; padding: 1rem 2rem; border-radius: 999px; font-weight: bold; z-index: 1000;
       box-shadow: 0 0 15px gold; animation: fadeIn 1s ease-out;">
@@ -37,17 +38,17 @@
     </div>
 
     <script>
-      // Register service worker
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/service-worker.js');
-      }
-
-      // Show VIP popup if redirected with ?vip=true
+      // Show VIP popup
       const params = new URLSearchParams(window.location.search);
       if (params.get("vip") === "true") {
         const popup = document.getElementById("vip-popup");
-        if (popup) popup.style.display = "block";
+        popup.style.display = "block";
         setTimeout(() => popup.style.display = "none", 4000);
+      }
+
+      // Register service worker
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service-worker.js");
       }
     </script>
 
