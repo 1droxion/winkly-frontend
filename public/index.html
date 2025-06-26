@@ -5,15 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Title -->
     <title>Winkly - Video Chat App</title>
 
-    <!-- App Icons & Manifest -->
+    <!-- Manifest and Icons -->
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" type="image/png" href="/icon-192x192.png" />
     <link rel="apple-touch-icon" href="/icon-512x512.png" sizes="512x512" />
 
-    <!-- Theme -->
+    <!-- Theme for PWA -->
     <meta name="theme-color" content="#ffcc70" />
     <meta name="background-color" content="#1a1a2e" />
 
@@ -24,17 +23,38 @@
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
-
-    <!-- Add custom styles in App.css -->
   </head>
+
   <body>
     <noscript>You need to enable JavaScript to run Winkly.</noscript>
     <div id="root"></div>
 
+    <!-- Optional: VIP Popup Trigger (Add your modal logic inside App.jsx if you want) -->
+    <div id="vip-popup" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+      background: gold; color: black; padding: 1rem 2rem; border-radius: 999px; font-weight: bold; z-index: 1000;
+      box-shadow: 0 0 15px gold; animation: fadeIn 1s ease-out;">
+      🎉 VIP Unlocked!
+    </div>
+
     <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/service-worker.js");
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js');
+      }
+
+      // Example VIP popup trigger after purchase
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("vip") === "true") {
+        const popup = document.getElementById("vip-popup");
+        if (popup) popup.style.display = "block";
+        setTimeout(() => popup.style.display = "none", 4000);
       }
     </script>
+
+    <style>
+      @keyframes fadeIn {
+        0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+      }
+    </style>
   </body>
 </html>
