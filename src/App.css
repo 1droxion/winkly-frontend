@@ -6,6 +6,7 @@ body {
   animation: gradientFlow 20s ease infinite;
   color: white;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 @keyframes gradientFlow {
@@ -22,17 +23,23 @@ body {
 .topbar {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 1.5rem;
+  gap: 12px;
+  margin-bottom: 2rem;
 }
 
 .topbar button {
-  padding: 8px 14px;
+  padding: 10px 14px;
   background: #ffffff22;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
+  font-size: 1.2rem;
   color: white;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.topbar button:hover {
+  background: #ffffff44;
 }
 
 .video-box {
@@ -49,13 +56,14 @@ body {
 .error {
   color: #ff6b6b;
   font-weight: bold;
+  font-size: 1.1rem;
 }
 
 .selectors {
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 select {
@@ -63,6 +71,8 @@ select {
   border-radius: 10px;
   font-size: 1rem;
   border: none;
+  background: #ffffff22;
+  color: white;
 }
 
 .actions {
