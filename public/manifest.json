@@ -3,9 +3,9 @@
   "short_name": "Winkly",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#1a1a2e",
   "theme_color": "#ffcc70",
-  "description": "Random video chat with filters, coins, and fun!",
+  "background_color": "#1a1a2e",
+  "description": "Winkly video chat app",
   "icons": [
     {
       "src": "/icon-192x192.png",
