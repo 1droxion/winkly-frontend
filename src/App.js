@@ -16,11 +16,11 @@ function App() {
   return (
     <div className="winkly">
       <div className="topbar">
-        <button>🏠 Home</button>
-        <button>🎉 Discover</button>
-        <button>💎 Plans</button>
-        <button>🧑‍💼 Profile</button>
-        <button>📊 Admin</button>
+        <button title="Home">🏠</button>
+        <button title="Discover">🎉</button>
+        <button title="Plans">💎</button>
+        <button title="Profile">🧑‍💼</button>
+        <button title="Admin">📊</button>
       </div>
 
       <h1>Winkly ★</h1>
