@@ -7,21 +7,21 @@
 
     <title>Winkly - Video Chat App</title>
 
-    <!-- Manifest and Icons -->
+    <!-- Manifest & Icons -->
     <link rel="manifest" href="/manifest.json" />
-    <link rel="icon" type="image/png" href="/icon-192x192.png" />
+    <link rel="icon" href="/icon-192x192.png" />
     <link rel="apple-touch-icon" href="/icon-512x512.png" sizes="512x512" />
 
-    <!-- Theme for PWA -->
+    <!-- Theme -->
     <meta name="theme-color" content="#ffcc70" />
     <meta name="background-color" content="#1a1a2e" />
 
-    <!-- Cache Fix -->
+    <!-- Cache Control -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
 
-    <!-- Font -->
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
   </head>
 
@@ -29,7 +29,7 @@
     <noscript>You need to enable JavaScript to run Winkly.</noscript>
     <div id="root"></div>
 
-    <!-- Optional: VIP Popup Trigger (Add your modal logic inside App.jsx if you want) -->
+    <!-- VIP Unlocked Popup -->
     <div id="vip-popup" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
       background: gold; color: black; padding: 1rem 2rem; border-radius: 999px; font-weight: bold; z-index: 1000;
       box-shadow: 0 0 15px gold; animation: fadeIn 1s ease-out;">
@@ -37,11 +37,12 @@
     </div>
 
     <script>
+      // Register service worker
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js');
       }
 
-      // Example VIP popup trigger after purchase
+      // Show VIP popup if redirected with ?vip=true
       const params = new URLSearchParams(window.location.search);
       if (params.get("vip") === "true") {
         const popup = document.getElementById("vip-popup");
