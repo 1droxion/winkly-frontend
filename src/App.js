@@ -1,4 +1,3 @@
-// === App.jsx ===
 import React, { useEffect, useRef, useState } from "react";
 import {
   BrowserRouter as Router,
@@ -20,6 +19,7 @@ function MainApp() {
   const [gender, setGender] = useState("Any Gender");
   const [country, setCountry] = useState("Any Country");
   const [view, setView] = useState("app");
+  const [cameraDenied, setCameraDenied] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,6 +32,10 @@ function MainApp() {
         if (localVideoRef.current) {
           localVideoRef.current.srcObject = stream;
         }
+      })
+      .catch((err) => {
+        console.error("Camera access denied:", err);
+        setCameraDenied(true);
       });
   }, []);
 
@@ -124,8 +128,9 @@ function MainApp() {
       </div>
 
       <div className="video-frame">
-        <video ref={localVideoRef} autoPlay muted />
-        {!connected && <span>🎥 Your Video Preview</span>}
+        <video ref={localVideoRef} autoPlay muted playsInline />
+        {!connected && !cameraDenied && <span>🎥 Your Video Preview</span>}
+        {cameraDenied && <span>🚫 Camera access denied</span>}
       </div>
 
       <div className="filter-bar">
