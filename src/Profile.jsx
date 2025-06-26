@@ -3,7 +3,11 @@ import axios from "axios";
 
 export default function Profile({ user, onLogout, children }) {
   const [withdrawStatus, setWithdrawStatus] = useState(null);
-  const earning = user.gifts_received * 0.05;
+
+  // 🛡 Protect against undefined user
+  if (!user) return <p style={{ padding: "2rem", color: "white" }}>Loading profile...</p>;
+
+  const earning = user.gifts_received ? user.gifts_received * 0.05 : 0;
   const payout = (earning * 0.8).toFixed(2); // 20% platform cut
 
   const handleWithdraw = async () => {
@@ -38,7 +42,7 @@ export default function Profile({ user, onLogout, children }) {
       <p><strong>Email:</strong> {user.email}</p>
       <p><strong>Coins:</strong> {user.coins}</p>
       <p><strong>Status:</strong> {user.vip ? "👑 VIP" : "Free User"}</p>
-      <p><strong>Gifts Received:</strong> 🎁 {user.gifts_received}</p>
+      <p><strong>Gifts Received:</strong> 🎁 {user.gifts_received || 0}</p>
       <p><strong>Estimated Earnings:</strong> ${earning.toFixed(2)} (💸 You’ll get: ${payout})</p>
 
       {user.is_girl && (
