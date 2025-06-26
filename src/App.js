@@ -110,9 +110,7 @@ function MainApp() {
           localStorage.removeItem("winkly_user");
           setView("login");
         }}
-      >
-        <button onClick={() => setView("admin")}>📊 Admin</button>
-      </Profile>
+      />
       <Sidebar />
     </>
   );
