@@ -34,7 +34,7 @@ function MainApp() {
         }
       })
       .catch((err) => {
-        console.error("Camera access denied:", err);
+        console.warn("Camera access denied:", err);
         setCameraDenied(true);
       });
   }, []);
@@ -43,15 +43,9 @@ function MainApp() {
     <div className="app">
       <h2 className="logo">💎 Upgrade Plan</h2>
       <div className="btn-group">
-        <a href="https://buy.stripe.com/14AaEX0vr3NidTX0SS97G03" target="_blank">
-          <button>5 Coins – $1.99</button>
-        </a>
-        <a href="https://buy.stripe.com/aFa7sL91X83y17bfNM97G04" target="_blank">
-          <button>20 Coins – $5</button>
-        </a>
-        <a href="https://buy.stripe.com/14AfZh0vrbfK3fj8lk97G05" target="_blank">
-          <button>50 Coins – $9.99</button>
-        </a>
+        <a href="https://buy.stripe.com/14AaEX0vr3NidTX0SS97G03" target="_blank"><button>5 Coins – $1.99</button></a>
+        <a href="https://buy.stripe.com/aFa7sL91X83y17bfNM97G04" target="_blank"><button>20 Coins – $5</button></a>
+        <a href="https://buy.stripe.com/14AfZh0vrbfK3fj8lk97G05" target="_blank"><button>50 Coins – $9.99</button></a>
         <a href="https://buy.stripe.com/dRm3cvemh4Rm9DH9po97G06" target="_blank">
           <button className="vip-btn">👑 Unlock VIP – $19.99</button>
         </a>
@@ -116,47 +110,49 @@ function MainApp() {
   );
 
   return (
-    <div className="app">
+    <div className="page-container">
       <Sidebar />
-      <h1 className="logo">Winkly ✯</h1>
+      <div className="app">
+        <h1 className="logo">Winkly ✯</h1>
 
-      <div className="coin-bar">
-        💰 Coins: {user.coins}
-        {user.vip && <span className="vip">👑 VIP</span>}
-      </div>
+        <div className="coin-bar">
+          💰 Coins: {user.coins}
+          {user.vip && <span className="vip">👑 VIP</span>}
+        </div>
 
-      <div className="video-frame">
-        <video ref={localVideoRef} autoPlay muted playsInline />
-        {!connected && !cameraDenied && <span>🎥 Your Video Preview</span>}
-        {cameraDenied && <span>🚫 Camera access denied</span>}
-      </div>
+        <div className="video-frame">
+          <video ref={localVideoRef} autoPlay muted playsInline />
+          {!connected && !cameraDenied && <span>🎥 Your Video Preview</span>}
+          {cameraDenied && <span>🚫 Camera access denied</span>}
+        </div>
 
-      <div className="filter-bar">
-        <div className="custom-dropdown">
-          <div className="dropdown-btn">{gender}</div>
-          <div className="dropdown-list">
-            <div onClick={() => setGender("Any Gender")}>Any Gender</div>
-            <div onClick={() => setGender("Boy")}>Boy</div>
-            <div onClick={() => setGender("Girl")}>Girl</div>
+        <div className="filter-bar">
+          <div className="custom-dropdown">
+            <div className="dropdown-btn">{gender}</div>
+            <div className="dropdown-list">
+              <div onClick={() => setGender("Any Gender")}>Any Gender</div>
+              <div onClick={() => setGender("Boy")}>Boy</div>
+              <div onClick={() => setGender("Girl")}>Girl</div>
+            </div>
+          </div>
+
+          <div className="custom-dropdown">
+            <div className="dropdown-btn">{country}</div>
+            <div className="dropdown-list">
+              <div onClick={() => setCountry("Any Country")}>Any Country</div>
+              <div onClick={() => setCountry("🇺🇸 USA")}>🇺🇸 USA</div>
+              <div onClick={() => setCountry("🇮🇳 India")}>🇮🇳 India</div>
+              <div onClick={() => setCountry("🇧🇷 Brazil")}>🇧🇷 Brazil</div>
+              <div onClick={() => setCountry("🇷🇺 Russia")}>🇷🇺 Russia</div>
+              <div onClick={() => setCountry("🇲🇽 Mexico")}>🇲🇽 Mexico</div>
+            </div>
           </div>
         </div>
 
-        <div className="custom-dropdown">
-          <div className="dropdown-btn">{country}</div>
-          <div className="dropdown-list">
-            <div onClick={() => setCountry("Any Country")}>Any Country</div>
-            <div onClick={() => setCountry("🇺🇸 USA")}>🇺🇸 USA</div>
-            <div onClick={() => setCountry("🇮🇳 India")}>🇮🇳 India</div>
-            <div onClick={() => setCountry("🇧🇷 Brazil")}>🇧🇷 Brazil</div>
-            <div onClick={() => setCountry("🇷🇺 Russia")}>🇷🇺 Russia</div>
-            <div onClick={() => setCountry("🇲🇽 Mexico")}>🇲🇽 Mexico</div>
-          </div>
+        <div className="btn-group">
+          <button onClick={handleConnect} disabled={user.coins <= 0}>🔄 Connect</button>
+          <button onClick={() => setConnected(false)}>⏭️ Skip</button>
         </div>
-      </div>
-
-      <div className="btn-group">
-        <button onClick={handleConnect} disabled={user.coins <= 0}>🔄 Connect</button>
-        <button onClick={() => setConnected(false)}>⏭️ Skip</button>
       </div>
     </div>
   );
