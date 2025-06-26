@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { FaHome, FaGem, FaUserTie, FaChartBar } from "react-icons/fa";
 import { GiPartyPopper } from "react-icons/gi";
+import axios from "axios";
 import "./App.css";
 
 import Discover from "./Discover";
@@ -14,42 +15,55 @@ const Home = () => <h2>🏠 Welcome to Winkly</h2>;
 function App() {
   const navigate = useNavigate();
   const [cameraAllowed, setCameraAllowed] = useState(null);
-  const [coins, setCoins] = useState(1);
+  const [user, setUser] = useState(null);
   const [gender, setGender] = useState("any");
   const [country, setCountry] = useState("any");
+  const [bot, setBot] = useState(null);
 
-  // 🧠 Simulated user (replace with real user from backend later)
-  const user = {
-    email: "user@example.com",
-    vip: false, // ✅ Set true for testing VIP
-    is_girl: false,
-    coins,
-    gifts_received: 20
-  };
+  const email = "user@example.com"; // replace this with real login session later
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(() => setCameraAllowed(true))
       .catch(() => setCameraAllowed(false));
+
+    axios.post("https://winkly-backend.onrender.com/get-user", { email })
+      .then(res => setUser(res.data.user))
+      .catch(() => alert("Failed to load user"));
   }, []);
 
   const handleConnect = () => {
-    if (!user.vip && coins <= 0) {
-      alert("❌ You need more coins to connect. Please upgrade to VIP.");
+    if (!user) return;
+    if (!user.vip && user.coins <= 0) {
+      alert("❌ You need more coins. Please upgrade or buy more.");
       return;
     }
 
     if (!user.vip) {
-      setCoins((prev) => prev - 1);
+      axios.post("https://winkly-backend.onrender.com/update-coins", {
+        email,
+        amount: -1
+      }).then(res => setUser({ ...user, coins: res.data.coins }));
     }
 
-    // Replace this with your real WebRTC iframe or match room
     window.open("https://winkly-call.vercel.app/room", "_blank");
   };
 
   const handleSkip = () => {
-    alert("⏭️ Searching for next user (real or bot)...");
-    // TODO: Inject bot if no real match (from backend)
+    axios.get("https://winkly-backend.onrender.com/fake-users")
+      .then(res => {
+        const bots = res.data;
+        const random = bots[Math.floor(Math.random() * bots.length)];
+        setBot(random);
+      })
+      .catch(() => {
+        setBot({
+          name: "Luna",
+          country: "IN",
+          gender: "girl",
+          photo: "https://randomuser.me/api/portraits/women/5.jpg"
+        });
+      });
   };
 
   return (
@@ -63,15 +77,24 @@ function App() {
       </div>
 
       <h1>Winkly ★</h1>
-      <p>💰 Coins: {coins} {user.vip && " (VIP 👑 Unlimited)"}</p>
+      {user && (
+        <p>💰 Coins: {user.coins} {user.vip && "(VIP 💫)"}</p>
+      )}
 
       <div className="video-box">
         {cameraAllowed === false ? (
-          <p className="error">🚫 Camera access denied</p>
+          <p className="error">🛘 Camera access denied</p>
         ) : (
           <video autoPlay muted playsInline className="preview"></video>
         )}
       </div>
+
+      {bot && (
+        <div className="bot-preview">
+          <img src={bot.photo} alt="bot" width="80" style={{ borderRadius: "50%" }} />
+          <p><strong>{bot.name}</strong> ({bot.gender}, {bot.country})</p>
+        </div>
+      )}
 
       <div className="selectors">
         <select value={gender} onChange={(e) => setGender(e.target.value)}>
@@ -99,7 +122,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/discover" element={<Discover />} />
         <Route path="/plans" element={<UpgradePage />} />
-        <Route path="/profile" element={<Profile user={user} onLogout={() => alert("Logged out")} />} />
+        <Route path="/profile" element={<Profile user={user} onLogout={() => alert("Logout")} />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
     </div>
