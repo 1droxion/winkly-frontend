@@ -16,11 +16,11 @@ function App() {
   return (
     <div className="winkly">
       <div className="topbar">
-        <button title="Home">🏠</button>
-        <button title="Discover">🎉</button>
-        <button title="Plans">💎</button>
-        <button title="Profile">🧑‍💼</button>
-        <button title="Admin">📊</button>
+        <button onClick={() => window.location.href = "/"} title="Home">🏠</button>
+        <button onClick={() => window.location.href = "/discover"} title="Discover">🎉</button>
+        <button onClick={() => window.location.href = "/plans"} title="Plans">💎</button>
+        <button onClick={() => window.location.href = "/profile"} title="Profile">🧑‍💼</button>
+        <button onClick={() => window.location.href = "/admin"} title="Admin">📊</button>
       </div>
 
       <h1>Winkly ★</h1>
