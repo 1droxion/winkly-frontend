@@ -1,6 +1,11 @@
-// === App.jsx with sidebar + room redirect ===
+// === App.jsx ===
 import React, { useEffect, useRef, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate
+} from "react-router-dom";
 import "./App.css";
 import Login from "./Login";
 import Profile from "./Profile";
@@ -19,31 +24,31 @@ function MainApp() {
 
   useEffect(() => {
     const saved = localStorage.getItem("winkly_user");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setUser(parsed);
-    }
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
-      if (localVideoRef.current) {
-        localVideoRef.current.srcObject = stream;
-      }
-    });
+    if (saved) setUser(JSON.parse(saved));
+
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then((stream) => {
+        if (localVideoRef.current) {
+          localVideoRef.current.srcObject = stream;
+        }
+      });
   }, []);
 
   const Plans = () => (
     <div className="app">
       <h2 className="logo">💎 Upgrade Plan</h2>
       <div className="btn-group">
-        <a href="https://buy.stripe.com/14AaEX0vr3NidTX0SS97G03" target="_blank" rel="noopener noreferrer">
+        <a href="https://buy.stripe.com/14AaEX0vr3NidTX0SS97G03" target="_blank">
           <button>5 Coins – $1.99</button>
         </a>
-        <a href="https://buy.stripe.com/aFa7sL91X83y17bfNM97G04" target="_blank" rel="noopener noreferrer">
+        <a href="https://buy.stripe.com/aFa7sL91X83y17bfNM97G04" target="_blank">
           <button>20 Coins – $5</button>
         </a>
-        <a href="https://buy.stripe.com/14AfZh0vrbfK3fj8lk97G05" target="_blank" rel="noopener noreferrer">
+        <a href="https://buy.stripe.com/14AfZh0vrbfK3fj8lk97G05" target="_blank">
           <button>50 Coins – $9.99</button>
         </a>
-        <a href="https://buy.stripe.com/dRm3cvemh4Rm9DH9po97G06" target="_blank" rel="noopener noreferrer">
+        <a href="https://buy.stripe.com/dRm3cvemh4Rm9DH9po97G06" target="_blank">
           <button className="vip-btn">👑 Unlock VIP – $19.99</button>
         </a>
       </div>
@@ -52,15 +57,11 @@ function MainApp() {
 
   const handleConnect = async () => {
     if (!user) return alert("Please login first.");
-    if (user.guest) return alert("Guest users can only connect once. Please register.");
+    if (user.guest) return alert("Guest users can only connect once.");
     if (!user.vip && (gender !== "Any Gender" || country !== "Any Country")) {
-      alert("VIP only! Buy VIP Access to use filters.");
-      return;
+      return alert("VIP only! Unlock filters.");
     }
-    if (user.coins <= 0) {
-      alert("You are out of coins. Please buy more.");
-      return;
-    }
+    if (user.coins <= 0) return alert("Buy more coins to connect.");
 
     try {
       const res = await fetch("https://winkly-backend.onrender.com/match", {
@@ -68,10 +69,11 @@ function MainApp() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ gender, country })
       });
+
       const data = await res.json();
       if (data.matched) {
         const roomId = Math.random().toString(36).substring(7);
-        alert("🎉 Matched! Redirecting to room...");
+        alert("🎉 Matched! Redirecting...");
         navigate(`/room/${roomId}`);
       } else {
         alert("⏳ Waiting for someone to join...");
@@ -95,7 +97,21 @@ function MainApp() {
   if (view === "admin") return <><Admin /><Sidebar /></>;
   if (view === "discover") return <><Discover /><Sidebar /></>;
   if (view === "plans") return <><Plans /><Sidebar /></>;
-  if (view === "profile") return <><Profile user={user} onLogout={() => { setUser(null); localStorage.removeItem("winkly_user"); setView("login"); }}><button onClick={() => setView("admin")}>📊 Admin</button></Profile><Sidebar /></>;
+  if (view === "profile") return (
+    <>
+      <Profile
+        user={user}
+        onLogout={() => {
+          setUser(null);
+          localStorage.removeItem("winkly_user");
+          setView("login");
+        }}
+      >
+        <button onClick={() => setView("admin")}>📊 Admin</button>
+      </Profile>
+      <Sidebar />
+    </>
+  );
 
   return (
     <div className="app">
@@ -105,8 +121,9 @@ function MainApp() {
         💰 Coins: {user.coins}
         {user.vip && <span className="vip">👑 VIP</span>}
       </div>
+
       <div className="video-frame">
-        <video ref={localVideoRef} autoPlay muted className="webcam-preview" />
+        <video ref={localVideoRef} autoPlay muted />
         {!connected && <span>🎥 Your Video Preview</span>}
       </div>
 
