@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { FaHome, FaGem, FaUserTie, FaChartBar } from "react-icons/fa";
 import { GiPartyPopper } from "react-icons/gi";
+import "./App.css";
+
+// Temporary page components
+const Home = () => <h2>🏠 Welcome to Winkly</h2>;
+const Discover = () => <h2>🎉 Discover Page</h2>;
+const UpgradePage = () => <h2>💎 Upgrade Plans</h2>;
+const Profile = () => <h2>🧑‍💼 Your Profile</h2>;
+const Admin = () => <h2>📊 Admin Dashboard</h2>;
 
 function App() {
+  const navigate = useNavigate();
   const [cameraAllowed, setCameraAllowed] = useState(null);
   const [coins, setCoins] = useState(1);
   const [gender, setGender] = useState("any");
@@ -18,11 +27,11 @@ function App() {
   return (
     <div className="winkly">
       <div className="topbar">
-        <button onClick={() => window.location.href = "/"} title="Home"><FaHome /></button>
-        <button onClick={() => window.location.href = "/discover"} title="Discover"><GiPartyPopper /></button>
-        <button onClick={() => window.location.href = "/plans"} title="Plans"><FaGem /></button>
-        <button onClick={() => window.location.href = "/profile"} title="Profile"><FaUserTie /></button>
-        <button onClick={() => window.location.href = "/admin"} title="Admin"><FaChartBar /></button>
+        <button onClick={() => navigate("/")} title="Home"><FaHome /></button>
+        <button onClick={() => navigate("/discover")} title="Discover"><GiPartyPopper /></button>
+        <button onClick={() => navigate("/plans")} title="Plans"><FaGem /></button>
+        <button onClick={() => navigate("/profile")} title="Profile"><FaUserTie /></button>
+        <button onClick={() => navigate("/admin")} title="Admin"><FaChartBar /></button>
       </div>
 
       <h1>Winkly ★</h1>
@@ -57,6 +66,14 @@ function App() {
         <button className="connect">🔗 Connect</button>
         <button className="skip">⏭️ Skip</button>
       </div>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/discover" element={<Discover />} />
+        <Route path="/plans" element={<UpgradePage />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/admin" element={<Admin />} />
+      </Routes>
     </div>
   );
 }
