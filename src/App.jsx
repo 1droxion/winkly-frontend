@@ -4,12 +4,13 @@ import { FaHome, FaGem, FaUserTie, FaChartBar } from "react-icons/fa";
 import { GiPartyPopper } from "react-icons/gi";
 import "./App.css";
 
-// Temporary page components
+// ✅ Import actual page components
+import Discover from "./Discover";
+import Profile from "./Profile";
+import Admin from "./Admin";
+import UpgradePage from "./UpgradePage";
+
 const Home = () => <h2>🏠 Welcome to Winkly</h2>;
-const Discover = () => <h2>🎉 Discover Page</h2>;
-const UpgradePage = () => <h2>💎 Upgrade Plans</h2>;
-const Profile = () => <h2>🧑‍💼 Your Profile</h2>;
-const Admin = () => <h2>📊 Admin Dashboard</h2>;
 
 function App() {
   const navigate = useNavigate();
