@@ -9,6 +9,7 @@ import Discover from "./Discover";
 import Profile from "./Profile";
 import Admin from "./Admin";
 import UpgradePage from "./UpgradePage";
+import AgeGate from "./AgeGate";
 
 const Home = () => <h2>🏠 Welcome to Winkly</h2>;
 
@@ -20,7 +21,7 @@ function App() {
   const [country, setCountry] = useState("any");
   const [bot, setBot] = useState(null);
 
-  const email = "user@example.com"; // Replace with session user
+  const email = "user@example.com"; // replace this with real login session later
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -34,9 +35,8 @@ function App() {
 
   const handleConnect = () => {
     if (!user) return;
-
     if (!user.vip && user.coins <= 0) {
-      alert("❌ You need more coins. Please upgrade.");
+      alert("❌ You need more coins. Please upgrade or buy more.");
       return;
     }
 
@@ -70,6 +70,8 @@ function App() {
 
   return (
     <div className="winkly">
+      <AgeGate />
+
       <div className="topbar">
         <button onClick={() => navigate("/")} title="Home"><FaHome /></button>
         <button onClick={() => navigate("/discover")} title="Discover"><GiPartyPopper /></button>
@@ -80,12 +82,12 @@ function App() {
 
       <h1>Winkly ★</h1>
       {user && (
-        <p>💰 Coins: {user.coins} {user.vip && "(VIP 👑 Unlimited)"}</p>
+        <p>💰 Coins: {user.coins} {user.vip && "(VIP 💫 Unlimited)"}</p>
       )}
 
       <div className="video-box">
         {cameraAllowed === false ? (
-          <p className="error">🚫 Camera access denied</p>
+          <p className="error">🛘 Camera access denied</p>
         ) : (
           <video autoPlay muted playsInline className="preview"></video>
         )}
@@ -127,6 +129,12 @@ function App() {
         <Route path="/profile" element={<Profile user={user} onLogout={() => alert("Logout")} />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
+
+      <footer style={{ marginTop: 50, padding: 20, fontSize: "0.85rem", color: "#aaa", textAlign: "center" }}>
+        <p><strong>Terms of Service:</strong> You must be 18+ to use this platform. Harassment, nudity, or abuse is banned.</p>
+        <p><strong>Privacy Policy:</strong> We only store essential data to run the platform. We don’t sell or share personal info.</p>
+        <p><strong>No Refund Policy:</strong> All payments (VIP, Coins, Gifts) are final and non-refundable.</p>
+      </footer>
     </div>
   );
 }
