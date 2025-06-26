@@ -20,7 +20,7 @@
     <meta name="background-color" content="#1a1a2e" />
     <meta name="description" content="Random video chat with filters and coins - Winkly" />
 
-    <!-- Cache Buster -->
+    <!-- Prevent cache issues -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
@@ -38,7 +38,7 @@
     </div>
 
     <script>
-      // Show VIP popup
+      // VIP popup logic
       const params = new URLSearchParams(window.location.search);
       if (params.get("vip") === "true") {
         const popup = document.getElementById("vip-popup");
