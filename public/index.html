@@ -2,15 +2,39 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Winkly</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- ✅ Add these lines for PWA support -->
+    <!-- Title -->
+    <title>Winkly - Video Chat App</title>
+
+    <!-- App Icons & Manifest -->
     <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/png" href="/icon-192x192.png" />
+    <link rel="apple-touch-icon" href="/icon-512x512.png" sizes="512x512" />
+
+    <!-- Theme -->
     <meta name="theme-color" content="#ffcc70" />
-    <link rel="apple-touch-icon" href="/icon-192x192.png" />
+    <meta name="background-color" content="#1a1a2e" />
+
+    <!-- Cache Fix -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Add custom styles in App.css -->
   </head>
   <body>
+    <noscript>You need to enable JavaScript to run Winkly.</noscript>
     <div id="root"></div>
+
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service-worker.js");
+      }
+    </script>
   </body>
 </html>
