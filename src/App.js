@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import { FaHome, FaGem, FaUserTie, FaChartBar } from "react-icons/fa";
+import { GiPartyPopper } from "react-icons/gi";
 
 function App() {
   const [cameraAllowed, setCameraAllowed] = useState(null);
@@ -16,11 +18,11 @@ function App() {
   return (
     <div className="winkly">
       <div className="topbar">
-        <button onClick={() => window.location.href = "/"} title="Home">🏠</button>
-        <button onClick={() => window.location.href = "/discover"} title="Discover">🎉</button>
-        <button onClick={() => window.location.href = "/plans"} title="Plans">💎</button>
-        <button onClick={() => window.location.href = "/profile"} title="Profile">🧑‍💼</button>
-        <button onClick={() => window.location.href = "/admin"} title="Admin">📊</button>
+        <button onClick={() => window.location.href = "/"} title="Home"><FaHome /></button>
+        <button onClick={() => window.location.href = "/discover"} title="Discover"><GiPartyPopper /></button>
+        <button onClick={() => window.location.href = "/plans"} title="Plans"><FaGem /></button>
+        <button onClick={() => window.location.href = "/profile"} title="Profile"><FaUserTie /></button>
+        <button onClick={() => window.location.href = "/admin"} title="Admin"><FaChartBar /></button>
       </div>
 
       <h1>Winkly ★</h1>
