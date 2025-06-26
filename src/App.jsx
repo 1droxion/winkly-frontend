@@ -10,6 +10,7 @@ import Profile from "./Profile";
 import Admin from "./Admin";
 import UpgradePage from "./UpgradePage";
 import AgeGate from "./AgeGate";
+import Room from "./Room";
 
 const Home = () => <h2>🏠 Welcome to Winkly</h2>;
 
@@ -22,6 +23,7 @@ function App() {
   const [bot, setBot] = useState(null);
 
   const email = "user@example.com"; // replace this with real login session later
+  const isIframe = window !== window.parent;
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -47,7 +49,7 @@ function App() {
       }).then(res => setUser({ ...user, coins: res.data.coins }));
     }
 
-    const callURL = `https://winkly-call.vercel.app/room?gender=${gender}&country=${country}`;
+    const callURL = `https://winkly-frontend-fmax.vercel.app/call?gender=${gender}&country=${country}`;
     window.open(callURL, "_blank");
   };
 
@@ -72,55 +74,61 @@ function App() {
     <div className="winkly">
       <AgeGate />
 
-      <div className="topbar">
-        <button onClick={() => navigate("/")} title="Home"><FaHome /></button>
-        <button onClick={() => navigate("/discover")} title="Discover"><GiPartyPopper /></button>
-        <button onClick={() => navigate("/plans")} title="Plans"><FaGem /></button>
-        <button onClick={() => navigate("/profile")} title="Profile"><FaUserTie /></button>
-        <button onClick={() => navigate("/admin")} title="Admin"><FaChartBar /></button>
-      </div>
-
-      <h1>Winkly ★</h1>
-      {user && (
-        <p>💰 Coins: {user.coins} {user.vip && "(VIP 💫 Unlimited)"}</p>
-      )}
-
-      <div className="video-box">
-        {cameraAllowed === false ? (
-          <p className="error">🛘 Camera access denied</p>
-        ) : (
-          <video autoPlay muted playsInline className="preview"></video>
-        )}
-      </div>
-
-      {bot && (
-        <div className="bot-preview">
-          <img src={bot.photo} alt="bot" width="80" style={{ borderRadius: "50%" }} />
-          <p><strong>{bot.name}</strong> ({bot.gender}, {bot.country})</p>
+      {!isIframe && (
+        <div className="topbar">
+          <button onClick={() => navigate("/")} title="Home"><FaHome /></button>
+          <button onClick={() => navigate("/discover")} title="Discover"><GiPartyPopper /></button>
+          <button onClick={() => navigate("/plans")} title="Plans"><FaGem /></button>
+          <button onClick={() => navigate("/profile")} title="Profile"><FaUserTie /></button>
+          <button onClick={() => navigate("/admin")} title="Admin"><FaChartBar /></button>
         </div>
       )}
 
-      <div className="selectors">
-        <select value={gender} onChange={(e) => setGender(e.target.value)}>
-          <option value="any">Any Gender</option>
-          <option value="boy">Boy</option>
-          <option value="girl">Girl</option>
-        </select>
+      {!isIframe && <h1>Winkly ★</h1>}
+      {!isIframe && user && (
+        <p>💰 Coins: {user.coins} {user.vip && "(VIP 💫 Unlimited)"}</p>
+      )}
 
-        <select value={country} onChange={(e) => setCountry(e.target.value)}>
-          <option value="any">Any Country</option>
-          <option value="us">🇺🇸 USA</option>
-          <option value="in">🇮🇳 India</option>
-          <option value="br">🇧🇷 Brazil</option>
-          <option value="ru">🇷🇺 Russia</option>
-          <option value="mx">🇲🇽 Mexico</option>
-        </select>
-      </div>
+      {!isIframe && (
+        <>
+          <div className="video-box">
+            {cameraAllowed === false ? (
+              <p className="error">🛘 Camera access denied</p>
+            ) : (
+              <video autoPlay muted playsInline className="preview"></video>
+            )}
+          </div>
 
-      <div className="actions">
-        <button className="connect" onClick={handleConnect}>🔗 Connect</button>
-        <button className="skip" onClick={handleSkip}>⏭️ Skip</button>
-      </div>
+          {bot && (
+            <div className="bot-preview">
+              <img src={bot.photo} alt="bot" width="80" style={{ borderRadius: "50%" }} />
+              <p><strong>{bot.name}</strong> ({bot.gender}, {bot.country})</p>
+            </div>
+          )}
+
+          <div className="selectors">
+            <select value={gender} onChange={(e) => setGender(e.target.value)}>
+              <option value="any">Any Gender</option>
+              <option value="boy">Boy</option>
+              <option value="girl">Girl</option>
+            </select>
+
+            <select value={country} onChange={(e) => setCountry(e.target.value)}>
+              <option value="any">Any Country</option>
+              <option value="us">🇺🇸 USA</option>
+              <option value="in">🇮🇳 India</option>
+              <option value="br">🇧🇷 Brazil</option>
+              <option value="ru">🇷🇺 Russia</option>
+              <option value="mx">🇲🇽 Mexico</option>
+            </select>
+          </div>
+
+          <div className="actions">
+            <button className="connect" onClick={handleConnect}>🔗 Connect</button>
+            <button className="skip" onClick={handleSkip}>⏭️ Skip</button>
+          </div>
+        </>
+      )}
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -128,13 +136,16 @@ function App() {
         <Route path="/plans" element={<UpgradePage />} />
         <Route path="/profile" element={<Profile user={user} onLogout={() => alert("Logout")} />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/call" element={<Room />} />
       </Routes>
 
-      <footer style={{ marginTop: 50, padding: 20, fontSize: "0.85rem", color: "#aaa", textAlign: "center" }}>
-        <p><strong>Terms of Service:</strong> You must be 18+ to use this platform. Harassment, nudity, or abuse is banned.</p>
-        <p><strong>Privacy Policy:</strong> We only store essential data to run the platform. We don’t sell or share personal info.</p>
-        <p><strong>No Refund Policy:</strong> All payments (VIP, Coins, Gifts) are final and non-refundable.</p>
-      </footer>
+      {!isIframe && (
+        <footer style={{ marginTop: 50, padding: 20, fontSize: "0.85rem", color: "#aaa", textAlign: "center" }}>
+          <p><strong>Terms of Service:</strong> You must be 18+ to use this platform. Harassment, nudity, or abuse is banned.</p>
+          <p><strong>Privacy Policy:</strong> We only store essential data to run the platform. We don’t sell or share personal info.</p>
+          <p><strong>No Refund Policy:</strong> All payments (VIP, Coins, Gifts) are final and non-refundable.</p>
+        </footer>
+      )}
     </div>
   );
 }
