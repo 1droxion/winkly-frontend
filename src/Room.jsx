@@ -25,25 +25,51 @@ export default function Room() {
   };
 
   return (
-    <div style={{ padding: 20, textAlign: "center" }}>
+    <div style={{ padding: 20, textAlign: "center", background: "#000", color: "#fff", minHeight: "100vh" }}>
       <h2>Matched with: <span style={{ color: "#ffcc70" }}>{gender.toUpperCase()} from {country.toUpperCase()}</span></h2>
-      <video ref={videoRef} autoPlay muted playsInline style={{ width: "80%", borderRadius: 16 }}></video>
+
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        playsInline
+        style={{ width: "80%", maxWidth: 600, borderRadius: 16, border: "3px solid #ffcc70" }}
+      ></video>
 
       <div style={{ marginTop: 20 }}>
-        <div style={{ height: 150, overflowY: "auto", background: "#111", color: "#fff", padding: 10, borderRadius: 8 }}>
+        <div
+          style={{
+            height: 150,
+            overflowY: "auto",
+            background: "#111",
+            color: "#fff",
+            padding: 10,
+            borderRadius: 8,
+            textAlign: "left",
+            maxWidth: 600,
+            margin: "0 auto"
+          }}
+        >
           {messages.map((msg, i) => (
-            <p key={i}><strong>{msg.from}:</strong> {msg.text}</p>
+            <p key={i} style={{ margin: "5px 0" }}><strong>{msg.from}:</strong> {msg.text}</p>
           ))}
         </div>
 
-        <input
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          onKeyDown={e => e.key === "Enter" && handleSend()}
-          placeholder="Type message..."
-          style={{ marginTop: 10, padding: 10, width: "70%", borderRadius: 8 }}
-        />
-        <button onClick={handleSend} style={{ marginLeft: 10, padding: 10, borderRadius: 8 }}>Send</button>
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 10 }}>
+          <input
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && handleSend()}
+            placeholder="Type message..."
+            style={{ padding: 10, width: "60%", borderRadius: 8, border: "1px solid #555" }}
+          />
+          <button
+            onClick={handleSend}
+            style={{ marginLeft: 10, padding: "10px 20px", borderRadius: 8, background: "#ffcc70", color: "#000", border: "none" }}
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
