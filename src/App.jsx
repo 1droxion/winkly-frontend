@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { FaHome, FaGem, FaUserTie, FaChartBar } from "react-icons/fa";
+import { FaHome, FaGem } from "react-icons/fa";
 import { GiPartyPopper } from "react-icons/gi";
 import axios from "axios";
 import "./App.css";
 
 import Discover from "./Discover";
-import Profile from "./Profile";
-import Admin from "./Admin";
 import UpgradePage from "./UpgradePage";
 import Room from "./Room";
 import VIPPopup from "./VIPPopup";
@@ -65,8 +63,6 @@ function App() {
           <button onClick={() => navigate("/")}><FaHome size={20} color="#000" /></button>
           <button onClick={() => navigate("/discover")}><GiPartyPopper size={20} color="#000" /></button>
           <button onClick={() => navigate("/plans")}><FaGem size={20} color="#000" /></button>
-          <button onClick={() => navigate("/profile")}><FaUserTie size={20} color="#000" /></button>
-          <button onClick={() => navigate("/admin")}><FaChartBar size={20} color="#000" /></button>
         </div>
       )}
 
@@ -159,9 +155,7 @@ function App() {
         <Route path="/" element={<div />} />
         <Route path="/discover" element={<div />} />
         <Route path="/plans" element={<div />} />
-        <Route path="/profile" element={<Profile user={user} />} />
         <Route path="/call" element={<Room />} />
-        <Route path="/admin" element={<Admin />} />
         <Route path="/login" element={<Login />} />
       </Routes>
     </div>
