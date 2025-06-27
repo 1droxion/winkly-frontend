@@ -22,8 +22,8 @@ function App() {
   const [country, setCountry] = useState("any");
   const [bot, setBot] = useState(null);
 
-  const email = "user@example.com"; // replace this with real login session later
-  const isIframe = window !== window.parent;
+  const email = "user@example.com"; // replace with real session later
+  const isRoomRoute = window.location.pathname === "/call";
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -74,8 +74,8 @@ function App() {
     <div className="winkly">
       <AgeGate />
 
-      {!isIframe && (
-        <div className="topbar">
+      {!isRoomRoute && (
+        <div className="topbar" style={{ background: "#ffcc70", padding: "10px 0", display: "flex", justifyContent: "center", gap: 16 }}>
           <button onClick={() => navigate("/")} title="Home"><FaHome /></button>
           <button onClick={() => navigate("/discover")} title="Discover"><GiPartyPopper /></button>
           <button onClick={() => navigate("/plans")} title="Plans"><FaGem /></button>
@@ -84,16 +84,14 @@ function App() {
         </div>
       )}
 
-      {!isIframe && <h1>Winkly ★</h1>}
-      {!isIframe && user && (
-        <p>💰 Coins: {user.coins} {user.vip && "(VIP 💫 Unlimited)"}</p>
-      )}
-
-      {!isIframe && (
+      {!isRoomRoute && (
         <>
+          <h1>Winkly ★</h1>
+          {user && <p>💰 Coins: {user.coins} {user.vip && "(VIP 💫 Unlimited)"}</p>}
+
           <div className="video-box">
             {cameraAllowed === false ? (
-              <p className="error">🛘 Camera access denied</p>
+              <p className="error">🛘 Camera access denied. Please allow camera in browser settings.</p>
             ) : (
               <video autoPlay muted playsInline className="preview"></video>
             )}
@@ -139,7 +137,7 @@ function App() {
         <Route path="/call" element={<Room />} />
       </Routes>
 
-      {!isIframe && (
+      {!isRoomRoute && (
         <footer style={{ marginTop: 50, padding: 20, fontSize: "0.85rem", color: "#aaa", textAlign: "center" }}>
           <p><strong>Terms of Service:</strong> You must be 18+ to use this platform. Harassment, nudity, or abuse is banned.</p>
           <p><strong>Privacy Policy:</strong> We only store essential data to run the platform. We don’t sell or share personal info.</p>
