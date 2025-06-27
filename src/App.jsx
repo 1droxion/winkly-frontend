@@ -63,44 +63,50 @@ function App() {
         <>
           <div style={{ textAlign: "center", paddingTop: 20 }}>
             <h1 style={{ fontSize: "2rem", color: "#ffcc70" }}>Winkly Live ★</h1>
-          </div>
 
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, flexWrap: "wrap", marginTop: 20 }}>
-            <button onClick={() => navigate("/")}><FaHome color="#000" /></button>
-            <button onClick={() => navigate("/discover")}><GiPartyPopper color="#000" /></button>
-            <button onClick={() => navigate("/plans")}><FaGem color="#000" /></button>
-            <button onClick={() => navigate("/profile")}><FaUserTie color="#000" /></button>
-            <button onClick={() => navigate("/admin")}><FaChartBar color="#000" /></button>
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, flexWrap: "wrap", marginTop: 20 }}>
+              <button onClick={() => navigate("/")}><FaHome color="#000" /></button>
+              <button onClick={() => navigate("/discover")}><GiPartyPopper color="#000" /></button>
+              <button onClick={() => navigate("/plans")}><FaGem color="#000" /></button>
+              <button onClick={() => navigate("/profile")}><FaUserTie color="#000" /></button>
+              <button onClick={() => navigate("/admin")}><FaChartBar color="#000" /></button>
 
-            <select value={gender} onChange={(e) => setGender(e.target.value)} style={{ padding: "6px 12px", borderRadius: 10, background: "#000", color: "#fff" }}>
-              <option value="any">Any Gender</option>
-              <option value="boy">Boy</option>
-              <option value="girl">Girl</option>
-            </select>
+              <select value={gender} onChange={(e) => setGender(e.target.value)} style={{ padding: "6px 12px", borderRadius: 10, background: "#000", color: "#fff" }}>
+                <option value="any">Any Gender</option>
+                <option value="boy">Boy</option>
+                <option value="girl">Girl</option>
+              </select>
 
-            <select value={country} onChange={(e) => setCountry(e.target.value)} style={{ padding: "6px 12px", borderRadius: 10, background: "#000", color: "#fff" }}>
-              <option value="any">Any Country</option>
-              <option value="us">USA</option>
-              <option value="in">India</option>
-              <option value="br">Brazil</option>
-              <option value="ru">Russia</option>
-              <option value="mx">Mexico</option>
-            </select>
+              <select value={country} onChange={(e) => setCountry(e.target.value)} style={{ padding: "6px 12px", borderRadius: 10, background: "#000", color: "#fff" }}>
+                <option value="any">Any Country</option>
+                <option value="us">USA</option>
+                <option value="in">India</option>
+                <option value="br">Brazil</option>
+                <option value="ru">Russia</option>
+                <option value="mx">Mexico</option>
+              </select>
 
-            <button onClick={handleConnect} style={{ background: "#000", color: "#fff", padding: "8px 16px", borderRadius: 10, border: "none" }}>Connect</button>
-            <button onClick={handleSkip} style={{ background: "#000", color: "#fff", padding: "8px 16px", borderRadius: 10, border: "none" }}>Skip</button>
-          </div>
+              <button onClick={handleConnect} style={{ background: "#000", color: "#fff", padding: "8px 16px", borderRadius: 10, border: "none" }}>Connect</button>
+              <button onClick={handleSkip} style={{ background: "#000", color: "#fff", padding: "8px 16px", borderRadius: 10, border: "none" }}>Skip</button>
+            </div>
 
-          <div style={{ textAlign: "center", marginTop: 30 }}>
-            {user && <p>💰 Coins: {user.coins} {user.vip && "(VIP 🔥 Unlimited)"}</p>}
-          </div>
+            <div style={{ textAlign: "center", marginTop: 20 }}>
+              {user && <p>💰 Coins: {user.coins} {user.vip && "(VIP 🔥 Unlimited)"}</p>}
+            </div>
 
-          <div className="video-box">
-            {cameraAllowed === false ? (
-              <p className="error">🚫 Camera access denied. Please allow camera in browser settings.</p>
-            ) : (
-              <video autoPlay muted playsInline className="preview"></video>
-            )}
+            <div className="video-box" style={{ marginTop: 20 }}>
+              {cameraAllowed === false ? (
+                <p className="error">🚫 Camera access denied. Please allow camera in browser settings.</p>
+              ) : (
+                <video autoPlay muted playsInline className="preview"></video>
+              )}
+            </div>
+
+            <footer style={{ marginTop: 40, fontSize: "0.85rem", color: "#aaa", textAlign: "center" }}>
+              <p><strong>Terms of Service:</strong> You must be 18+ to use this platform. Harassment, nudity, or abuse is banned.</p>
+              <p><strong>Privacy Policy:</strong> We only store essential data to run the platform. We don’t sell or share personal info.</p>
+              <p><strong>No Refund Policy:</strong> All payments (VIP, Coins, Gifts) are final and non-refundable.</p>
+            </footer>
           </div>
         </>
       )}
