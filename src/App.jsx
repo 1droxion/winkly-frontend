@@ -77,7 +77,10 @@ function App() {
         <div className="main-panel">
           {isHome && (
             <>
-              <h1 style={{ textAlign: "center", color: "#ffcc70" }}>Winkly Live ★</h1>
+              <h1 style={{ textAlign: "center", color: "#ffd700", fontSize: "2.4rem", marginBottom: 20 }}>
+                Winkly Live ★
+              </h1>
+
               <div className="selectors">
                 <select value={gender} onChange={(e) => setGender(e.target.value)}>
                   <option value="any">Any Gender</option>
@@ -92,24 +95,60 @@ function App() {
                   <option value="ru">Russia</option>
                   <option value="mx">Mexico</option>
                 </select>
-                <div className="actions">
-                  <button onClick={handleConnect}>Connect</button>
-                </div>
+                <button
+                  onClick={handleConnect}
+                  style={{
+                    padding: "12px 26px",
+                    background: "#ffd700",
+                    color: "#000",
+                    borderRadius: "12px",
+                    border: "none",
+                    fontSize: "1rem",
+                    fontWeight: "600",
+                    cursor: "pointer"
+                  }}
+                >
+                  Connect
+                </button>
               </div>
 
-              {user && <p style={{ textAlign: "center", marginTop: 10 }}>💰 Coins: {user.coins} {user.vip && "(VIP 🔥 Unlimited)"}</p>}
-
-              <div className="video-box">
-                {cameraAllowed === false ? (
-                  <p className="error">🚫 Camera access denied. Please allow camera in browser settings.</p>
-                ) : (
-                  <video autoPlay muted playsInline className="preview" />
+              <div style={{ textAlign: "center", marginTop: 20 }}>
+                {user && (
+                  <p style={{ fontSize: "1rem" }}>
+                    💰 Coins: <strong>{user.coins}</strong> {user.vip && "(VIP 🔥 Unlimited)"}
+                  </p>
                 )}
               </div>
 
-              <div className="chat-box">
-                <p><strong>Matched with:</strong> {gender.toUpperCase()} from {country.toUpperCase()}</p>
-                <div className="chat-message">💬 Waiting for message...</div>
+              <div className="video-box" style={{ justifyContent: "center", marginTop: 30 }}>
+                {cameraAllowed === false ? (
+                  <p className="error">🚫 Camera access denied.</p>
+                ) : (
+                  <video autoPlay muted playsInline className="preview" style={{
+                    width: "100%",
+                    maxWidth: "480px",
+                    borderRadius: "18px",
+                    border: "3px solid #ffd700",
+                    boxShadow: "0 0 30px #ffd70055"
+                  }} />
+                )}
+              </div>
+
+              <div className="chat-box" style={{ marginTop: 30, textAlign: "center" }}>
+                <p style={{ fontWeight: "bold", fontSize: "1.1rem", color: "#eee" }}>
+                  Matched with: <span style={{ color: "#ffd700" }}>{gender.toUpperCase()}</span> from <span style={{ color: "#ffd700" }}>{country.toUpperCase()}</span>
+                </p>
+                <div style={{
+                  marginTop: 10,
+                  padding: "10px 16px",
+                  background: "#2c2c2c",
+                  borderRadius: "10px",
+                  color: "#ccc",
+                  display: "inline-block",
+                  fontSize: "0.95rem"
+                }}>
+                  💬 Waiting for message...
+                </div>
               </div>
             </>
           )}
@@ -120,14 +159,13 @@ function App() {
         </div>
       )}
 
-      {/* Routes */}
       <Routes>
+        <Route path="/" element={<div />} />
         <Route path="/discover" element={<div />} />
         <Route path="/plans" element={<div />} />
         <Route path="/profile" element={<div />} />
         <Route path="/call" element={<Room />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/" element={<div />} />
       </Routes>
     </div>
   );
