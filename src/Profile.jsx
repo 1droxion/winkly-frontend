@@ -1,61 +1,59 @@
-import React, { useState } from "react";
-import axios from "axios";
+// src/Profile.jsx
+import React from "react";
 
-export default function Profile({ user, onLogout, children }) {
-  const [withdrawStatus, setWithdrawStatus] = useState(null);
-
-  // 🛡 Protect against undefined user
-  if (!user) return <p style={{ padding: "2rem", color: "white" }}>Loading profile...</p>;
-
-  const earning = user.gifts_received ? user.gifts_received * 0.05 : 0;
-  const payout = (earning * 0.8).toFixed(2); // 20% platform cut
-
-  const handleWithdraw = async () => {
-    const method = prompt("Enter payout method (e.g. PayPal, UPI, Bank):");
-    const address = prompt("Enter your payout address (email/UPI ID):");
-    const amount = parseFloat(prompt(`Enter amount to withdraw (max $${earning.toFixed(2)}):`));
-
-    if (!method || !address || !amount) return alert("All fields are required.");
-    if (amount > earning) return alert("You cannot withdraw more than your earnings.");
-
-    try {
-      const res = await axios.post("https://winkly-backend.onrender.com/withdraw-request", {
-        email: user.email,
-        method,
-        address,
-        amount
-      });
-      if (res.data.success) {
-        setWithdrawStatus(`✅ Withdraw request sent! You will receive ~$${res.data.payout_after_fee}`);
-      } else {
-        setWithdrawStatus(`❌ ${res.data.error}`);
-      }
-    } catch (err) {
-      setWithdrawStatus("❌ Something went wrong.");
-    }
-  };
+function Profile({ user, onLogout }) {
+  if (!user) {
+    return (
+      <div style={{ textAlign: "center", paddingTop: "60px" }}>
+        <h2>Loading profile...</h2>
+      </div>
+    );
+  }
 
   return (
-    <div className="app">
-      <h2 className="logo">👤 Profile</h2>
+    <div style={{ textAlign: "center", paddingTop: "40px", maxWidth: 600, margin: "0 auto" }}>
+      <h1 style={{ color: "#ffcc70", marginBottom: "20px" }}>👤 My Profile</h1>
 
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>Coins:</strong> {user.coins}</p>
-      <p><strong>Status:</strong> {user.vip ? "👑 VIP" : "Free User"}</p>
-      <p><strong>Gifts Received:</strong> 🎁 {user.gifts_received || 0}</p>
-      <p><strong>Estimated Earnings:</strong> ${earning.toFixed(2)} (💸 You’ll get: ${payout})</p>
+      <div style={{
+        background: "rgba(255, 255, 255, 0.05)",
+        padding: "20px",
+        borderRadius: "20px",
+        boxShadow: "0 0 10px rgba(0,0,0,0.4)"
+      }}>
+        <img
+          src="https://i.imgur.com/3GvwNBf.png"
+          alt="User Avatar"
+          style={{ width: 120, height: 120, borderRadius: "50%", marginBottom: 10 }}
+        />
 
-      {user.is_girl && (
-        <>
-          <button className="vip-btn" onClick={handleWithdraw}>
-            💸 Request Withdraw
-          </button>
-          {withdrawStatus && <p style={{ marginTop: 10 }}>{withdrawStatus}</p>}
-        </>
-      )}
+        <h2 style={{ margin: "10px 0" }}>{user.email}</h2>
 
-      <button className="dropdown-btn" onClick={onLogout}>🚪 Logout</button>
-      <div style={{ marginTop: "1rem" }}>{children}</div>
+        <p>💰 Coins: <strong>{user.coins}</strong></p>
+        <p>🔥 VIP: <strong>{user.vip ? "Yes ✅" : "No ❌"}</strong></p>
+
+        <button
+          onClick={onLogout}
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            background: "#ff4757",
+            color: "white",
+            border: "none",
+            borderRadius: "10px",
+            cursor: "pointer"
+          }}
+        >
+          Logout
+        </button>
+      </div>
+
+      <div className="legal" style={{ marginTop: "40px" }}>
+        <p><strong>Terms of Service:</strong> You must be 18+ to use this platform.</p>
+        <p><strong>Privacy Policy:</strong> We don’t sell or share personal info.</p>
+        <p><strong>No Refund Policy:</strong> All payments are final and non-refundable.</p>
+      </div>
     </div>
   );
 }
+
+export default Profile;
