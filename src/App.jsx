@@ -60,37 +60,40 @@ function App() {
       <AgeGate />
 
       {!isRoomRoute && (
-        <div className="topbar" style={{ background: "#ffcc70", padding: "15px", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-          <button onClick={() => navigate("/")}><FaHome color="#000" /></button>
-          <button onClick={() => navigate("/discover")}><GiPartyPopper color="#000" /></button>
-          <button onClick={() => navigate("/plans")}><FaGem color="#000" /></button>
-          <button onClick={() => navigate("/profile")}><FaUserTie color="#000" /></button>
-          <button onClick={() => navigate("/admin")}><FaChartBar color="#000" /></button>
-
-          <select value={gender} onChange={(e) => setGender(e.target.value)} style={{ padding: "6px 10px", borderRadius: "8px" }}>
-            <option value="any">Any Gender</option>
-            <option value="boy">Boy</option>
-            <option value="girl">Girl</option>
-          </select>
-
-          <select value={country} onChange={(e) => setCountry(e.target.value)} style={{ padding: "6px 10px", borderRadius: "8px" }}>
-            <option value="any">Any Country</option>
-            <option value="us">USA</option>
-            <option value="in">India</option>
-            <option value="br">Brazil</option>
-            <option value="ru">Russia</option>
-            <option value="mx">Mexico</option>
-          </select>
-
-          <button style={{ background: "#000", color: "#fff", padding: "8px 15px", borderRadius: "10px", border: "none" }} onClick={handleConnect}>Connect</button>
-          <button style={{ background: "#000", color: "#fff", padding: "8px 15px", borderRadius: "10px", border: "none" }} onClick={handleSkip}>Skip</button>
-        </div>
-      )}
-
-      {!isRoomRoute && (
         <>
-          <h1 style={{ marginTop: 30 }}>Winkly ★</h1>
-          {user && <p>💰 Coins: {user.coins} {user.vip && "(VIP 🔥 Unlimited)"}</p>}
+          <div style={{ textAlign: "center", paddingTop: 20 }}>
+            <h1 style={{ fontSize: "2rem", color: "#ffcc70" }}>Winkly Live ★</h1>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, flexWrap: "wrap", marginTop: 20 }}>
+            <button onClick={() => navigate("/")}><FaHome color="#000" /></button>
+            <button onClick={() => navigate("/discover")}><GiPartyPopper color="#000" /></button>
+            <button onClick={() => navigate("/plans")}><FaGem color="#000" /></button>
+            <button onClick={() => navigate("/profile")}><FaUserTie color="#000" /></button>
+            <button onClick={() => navigate("/admin")}><FaChartBar color="#000" /></button>
+
+            <select value={gender} onChange={(e) => setGender(e.target.value)} style={{ padding: "6px 12px", borderRadius: 10, background: "#000", color: "#fff" }}>
+              <option value="any">Any Gender</option>
+              <option value="boy">Boy</option>
+              <option value="girl">Girl</option>
+            </select>
+
+            <select value={country} onChange={(e) => setCountry(e.target.value)} style={{ padding: "6px 12px", borderRadius: 10, background: "#000", color: "#fff" }}>
+              <option value="any">Any Country</option>
+              <option value="us">USA</option>
+              <option value="in">India</option>
+              <option value="br">Brazil</option>
+              <option value="ru">Russia</option>
+              <option value="mx">Mexico</option>
+            </select>
+
+            <button onClick={handleConnect} style={{ background: "#000", color: "#fff", padding: "8px 16px", borderRadius: 10, border: "none" }}>Connect</button>
+            <button onClick={handleSkip} style={{ background: "#000", color: "#fff", padding: "8px 16px", borderRadius: 10, border: "none" }}>Skip</button>
+          </div>
+
+          <div style={{ textAlign: "center", marginTop: 30 }}>
+            {user && <p>💰 Coins: {user.coins} {user.vip && "(VIP 🔥 Unlimited)"}</p>}
+          </div>
 
           <div className="video-box">
             {cameraAllowed === false ? (
