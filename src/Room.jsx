@@ -7,8 +7,10 @@ export default function Room() {
   const country = search.get("country") || "any";
 
   const [message, setMessage] = useState("Waiting for message...");
+  const [input, setInput] = useState("");
   const [stream, setStream] = useState(null);
   const [connected, setConnected] = useState(false);
+  const [messages, setMessages] = useState([]);
 
   const videoRef = useRef();
 
@@ -25,6 +27,12 @@ export default function Room() {
         setConnected(false);
       });
   }, []);
+
+  const handleSend = () => {
+    if (!input.trim()) return;
+    setMessages(prev => [...prev, { sender: "you", text: input.trim() }]);
+    setInput("");
+  };
 
   return (
     <div style={{ padding: 20, textAlign: "center" }}>
@@ -53,14 +61,39 @@ export default function Room() {
       </p>
 
       <div style={{
-        marginTop: 16,
-        background: "#222",
-        color: "#ccc",
+        marginTop: 20,
+        background: "#111",
         padding: "10px 16px",
-        borderRadius: 10,
-        display: "inline-block"
+        borderRadius: 12,
+        width: "100%",
+        maxWidth: 500,
+        marginInline: "auto"
       }}>
-        💬 {message}
+        <div style={{ minHeight: 80, marginBottom: 10, color: "#ccc", fontSize: "0.95rem", textAlign: "left" }}>
+          {messages.length === 0 ? (
+            <span>💬 {message}</span>
+          ) : (
+            messages.map((msg, i) => (
+              <div key={i} style={{ marginBottom: 4 }}>
+                <strong>{msg.sender}:</strong> {msg.text}
+              </div>
+            ))
+          )}
+        </div>
+        <div style={{ display: "flex" }}>
+          <input
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && handleSend()}
+            placeholder="Type message..."
+            style={{ flex: 1, padding: 8, borderRadius: 8, border: "none", outline: "none" }}
+          />
+          <button
+            onClick={handleSend}
+            style={{ marginLeft: 8, padding: "8px 16px", background: "#ffd700", color: "#000", fontWeight: "bold", borderRadius: 8, border: "none" }}>
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
