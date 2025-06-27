@@ -1,74 +1,59 @@
+// src/Login.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export default function Login({ onLogin }) {
+function Login() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate();
 
-  const handleAuth = async () => {
-    const url = isLogin
-      ? "https://winkly-backend.onrender.com/login"
-      : "https://winkly-backend.onrender.com/register";
+  const handleLogin = () => {
+    if (!email.includes("@")) return alert("Enter valid email");
 
-    const res = await axios.post(url, { email, password });
-    if (res.data?.user) {
-      localStorage.setItem("winkly_user", JSON.stringify(res.data.user));
-      onLogin(res.data.user);
-    } else {
-      alert(res.data?.error || "Failed");
-    }
-  };
-
-  const handleGuest = () => {
-    const guestUser = {
-      email: null,
-      coins: 1,
-      vip: false,
-      gifts_received: 0,
-      guest: true
-    };
-    localStorage.setItem("winkly_user", JSON.stringify(guestUser));
-    onLogin(guestUser);
+    axios.post("https://winkly-backend.onrender.com/get-user", { email })
+      .then(res => {
+        localStorage.setItem("winkly_user", JSON.stringify(res.data.user));
+        navigate("/");
+      })
+      .catch(() => alert("Login failed"));
   };
 
   return (
-    <div className="app">
-      <h2 className="logo">{isLogin ? "Login" : "Register"}</h2>
-
+    <div style={{ textAlign: "center", padding: 40 }}>
+      <h1 style={{ color: "#ffd700", marginBottom: 20 }}>Winkly Login</h1>
       <input
-        placeholder="Email"
+        type="email"
+        placeholder="Enter your email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        style={{ padding: "12px", borderRadius: "8px", marginBottom: 10, width: "100%" }}
+        style={{
+          padding: "10px 16px",
+          borderRadius: "10px",
+          border: "1px solid #888",
+          width: "80%",
+          maxWidth: 300,
+          fontSize: "1rem",
+          marginBottom: 20
+        }}
       />
-      <input
-        placeholder="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        style={{ padding: "12px", borderRadius: "8px", marginBottom: 10, width: "100%" }}
-      />
-
-      <button className="vip-btn" onClick={handleAuth}>
-        {isLogin ? "🔐 Login" : "🆕 Register"}
+      <br />
+      <button
+        onClick={handleLogin}
+        style={{
+          background: "#ffd700",
+          color: "#000",
+          padding: "10px 24px",
+          fontWeight: "bold",
+          borderRadius: "10px",
+          border: "none",
+          fontSize: "1rem",
+          cursor: "pointer"
+        }}
+      >
+        Login
       </button>
-
-      <p>
-        {isLogin ? "New user? " : "Have an account? "}
-        <span style={{ color: "skyblue", cursor: "pointer" }} onClick={() => setIsLogin(!isLogin)}>
-          {isLogin ? "Register here" : "Login" }
-        </span>
-      </p>
-
-      <div style={{ marginTop: 20 }}>
-        <button className="dropdown-btn" onClick={handleGuest}>
-          🧑‍🚀 Continue as Guest
-        </button>
-        <p style={{ fontSize: "0.9rem", color: "#aaa", marginTop: 5 }}>
-          You can explore Winkly without logging in.
-        </p>
-      </div>
     </div>
   );
 }
+
+export default Login;
