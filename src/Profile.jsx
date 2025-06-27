@@ -4,14 +4,14 @@ import React from "react";
 function Profile({ user, onLogout }) {
   if (!user) {
     return (
-      <div style={{ textAlign: "center", paddingTop: "60px" }}>
+      <div style={{ textAlign: "center", paddingTop: "80px" }}>
         <h2>Loading profile...</h2>
       </div>
     );
   }
 
   return (
-    <div style={{ textAlign: "center", paddingTop: "40px", maxWidth: 600, margin: "0 auto" }}>
+    <div className="main-panel" style={{ textAlign: "center", paddingTop: "40px", maxWidth: 600, margin: "0 auto" }}>
       <h1 style={{ color: "#ffcc70", marginBottom: "20px" }}>👤 My Profile</h1>
 
       <div style={{
@@ -32,7 +32,7 @@ function Profile({ user, onLogout }) {
         <p>🔥 VIP: <strong>{user.vip ? "Yes ✅" : "No ❌"}</strong></p>
 
         <button
-          onClick={onLogout}
+          onClick={onLogout || (() => alert("Logged out!"))}
           style={{
             marginTop: "20px",
             padding: "10px 20px",
