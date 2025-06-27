@@ -7,7 +7,7 @@ body {
   animation: gradientFlow 20s ease infinite;
   color: white;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 @keyframes gradientFlow {
@@ -16,32 +16,26 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* === Wrapper === */
 .winkly {
   display: flex;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
 }
 
 /* === Sidebar === */
 .sidebar {
-  width: 70px;
+  width: 80px;
   background: #ffcc70;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 20px;
-  gap: 20px;
 }
+
 .sidebar button {
   background: none;
   border: none;
-  padding: 10px;
+  margin-bottom: 16px;
   cursor: pointer;
-  transition: transform 0.2s ease;
-}
-.sidebar button:hover {
-  transform: scale(1.2);
 }
 
 /* === Main Panel === */
@@ -49,62 +43,59 @@ body {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
-  height: 100vh;
 }
 
-.main-panel h1 {
-  font-size: 2rem;
-  color: #ffcc70;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* === Selectors === */
 .selectors {
   display: flex;
+  gap: 10px;
   flex-wrap: wrap;
-  gap: 10px;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
-select {
-  padding: 10px;
-  border-radius: 10px;
+
+.selectors select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #000;
+  color: #fff;
+  border: none;
   font-size: 1rem;
-  border: none;
-  background: #000;
-  color: white;
 }
 
-/* === Buttons === */
-.actions {
-  display: flex;
-  gap: 10px;
-}
-.actions button {
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: none;
-  background: #000;
-  color: white;
-  cursor: pointer;
-}
-.actions button:hover {
-  background: #333;
-}
-
-/* === Video Box === */
+/* === Video Preview === */
 .video-box {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
+
 .preview {
-  width: 320px;
-  height: 240px;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  border-radius: 18px;
+  border: 3px solid #ffd700;
+  box-shadow: 0 0 30px #ffd70055;
   background: black;
-  border-radius: 12px;
 }
+
+/* === Chat / Message Box === */
+.chat-box {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.chat-box div {
+  margin-top: 10px;
+  padding: 10px 16px;
+  background: #2c2c2c;
+  border-radius: 10px;
+  color: #ccc;
+  display: inline-block;
+  font-size: 0.95rem;
+}
+
+/* === Error Message === */
 .error {
   color: #ff6b6b;
   font-weight: bold;
@@ -112,57 +103,40 @@ select {
   text-align: center;
 }
 
-/* === Chat Box === */
-.chat-box {
-  margin-top: 20px;
-  text-align: center;
-}
-.chat-message {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 10px 14px;
-  border-radius: 10px;
-  display: inline-block;
-  margin-top: 6px;
-  font-size: 0.95rem;
-  color: #eee;
-}
+/* === Responsive Fixes === */
+@media screen and (max-width: 768px) {
+  .winkly {
+    flex-direction: column;
+  }
 
-/* === Legal / Footer === */
-.legal {
-  margin-top: 40px;
-  font-size: 0.85rem;
-  color: #aaa;
-  text-align: center;
-}
+  .sidebar {
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    height: 60px;
+    padding: 10px;
+  }
 
-/* === Plans Page === */
-.plans-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-}
-.plan-card {
-  background: #1a1a1a;
-  border-radius: 20px;
-  padding: 20px;
-  width: 260px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.4);
-  transition: transform 0.2s;
-}
-.plan-card:hover {
-  transform: translateY(-5px);
-}
-.plan-card h3 {
-  margin-top: 0;
-}
-.plan-card button {
-  margin-top: 10px;
-  padding: 10px 16px;
-  background: gold;
-  color: black;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  .main-panel {
+    padding: 16px;
+  }
+
+  .selectors {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .selectors select {
+    width: 90%;
+    max-width: 280px;
+  }
+
+  .preview {
+    max-width: 100%;
+  }
+
+  .chat-box div {
+    width: 90%;
+    max-width: 320px;
+  }
 }
