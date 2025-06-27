@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { FaHome, FaGem, FaUserTie, FaChartBar } from "react-icons/fa";
@@ -11,23 +12,23 @@ import Admin from "./Admin";
 import UpgradePage from "./UpgradePage";
 import Room from "./Room";
 
-const Home = () => <></>;
-
 function App() {
   const navigate = useNavigate();
   const [cameraAllowed, setCameraAllowed] = useState(null);
   const [user, setUser] = useState(null);
   const [gender, setGender] = useState("any");
   const [country, setCountry] = useState("any");
-  const [ageConfirmed, setAgeConfirmed] = useState(
-    localStorage.getItem("ageConfirmed") === "true"
-  );
+  const [ageConfirmed, setAgeConfirmed] = useState(localStorage.getItem("ageConfirmed") === "true");
   const email = "user@example.com";
   const isRoomRoute = window.location.pathname === "/call";
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then(() => setCameraAllowed(true))
+      .then(stream => {
+        setCameraAllowed(true);
+        const video = document.querySelector("video");
+        if (video) video.srcObject = stream;
+      })
       .catch(() => setCameraAllowed(false));
 
     axios.post("https://winkly-backend.onrender.com/get-user", { email })
@@ -69,19 +70,11 @@ function App() {
   };
 
   return (
-    <div className="winkly" style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+    <div className="winkly">
       {!isRoomRoute && (
         <>
-          {/* Sidebar on Left */}
-          <div style={{
-            width: 70,
-            background: "#ffcc70",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            paddingTop: 20,
-            gap: 20
-          }}>
+          {/* Sidebar */}
+          <div className="sidebar">
             <button onClick={() => navigate("/")}><FaHome size={20} color="#000" /></button>
             <button onClick={() => navigate("/discover")}><GiPartyPopper size={20} color="#000" /></button>
             <button onClick={() => navigate("/plans")}><FaGem size={20} color="#000" /></button>
@@ -90,17 +83,16 @@ function App() {
           </div>
 
           {/* Main Panel */}
-          <div style={{ flex: 1, padding: 20, overflowY: "auto" }}>
-            <h1 style={{ fontSize: "2rem", color: "#ffcc70", marginBottom: 10 }}>Winkly Live ★</h1>
+          <div className="main-panel">
+            <h1>Winkly Live ★</h1>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>
-              <select value={gender} onChange={(e) => setGender(e.target.value)} style={{ padding: "8px 12px", borderRadius: 8, background: "#000", color: "#fff" }}>
+            <div className="selectors">
+              <select value={gender} onChange={(e) => setGender(e.target.value)}>
                 <option value="any">Any Gender</option>
                 <option value="boy">Boy</option>
                 <option value="girl">Girl</option>
               </select>
-
-              <select value={country} onChange={(e) => setCountry(e.target.value)} style={{ padding: "8px 12px", borderRadius: 8, background: "#000", color: "#fff" }}>
+              <select value={country} onChange={(e) => setCountry(e.target.value)}>
                 <option value="any">Any Country</option>
                 <option value="us">USA</option>
                 <option value="in">India</option>
@@ -108,37 +100,41 @@ function App() {
                 <option value="ru">Russia</option>
                 <option value="mx">Mexico</option>
               </select>
-
-              <button onClick={handleConnect} style={{ background: "#000", color: "#fff", padding: "8px 16px", borderRadius: 10, border: "none" }}>Connect</button>
-              <button onClick={handleSkip} style={{ background: "#000", color: "#fff", padding: "8px 16px", borderRadius: 10, border: "none" }}>Skip</button>
+              <div className="actions">
+                <button onClick={handleConnect}>Connect</button>
+                <button onClick={handleSkip}>Skip</button>
+              </div>
             </div>
 
-            <div style={{ marginBottom: 20 }}>
-              {user && <p>💰 Coins: {user.coins} {user.vip && "(VIP 🔥 Unlimited)"}</p>}
-            </div>
+            {user && <p style={{ marginTop: 10 }}>💰 Coins: {user.coins} {user.vip && "(VIP 🔥 Unlimited)"}</p>}
 
             <div className="video-box">
               {cameraAllowed === false ? (
                 <p className="error">🚫 Camera access denied. Please allow camera in browser settings.</p>
               ) : (
-                <video autoPlay muted playsInline className="preview"></video>
+                <video autoPlay muted playsInline className="preview" />
               )}
             </div>
 
-            <div style={{ marginTop: 40, fontSize: "0.85rem", color: "#aaa", textAlign: "center" }}>
-              <p><strong>Terms of Service:</strong> You must be 18+ to use this platform. Harassment, nudity, or abuse is banned.</p>
-              <p><strong>Privacy Policy:</strong> We only store essential data to run the platform. We don’t sell or share personal info.</p>
-              <p><strong>No Refund Policy:</strong> All payments (VIP, Coins, Gifts) are final and non-refundable.</p>
+            <div className="chat-box">
+              <p><strong>Matched with:</strong> ANY from ANY</p>
+              <div className="chat-message">💬 Waiting for message...</div>
+            </div>
+
+            <div className="legal">
+              <p><strong>Terms of Service:</strong> You must be 18+ to use this platform.</p>
+              <p><strong>Privacy Policy:</strong> We don’t sell or share personal info.</p>
+              <p><strong>No Refund Policy:</strong> All payments are final and non-refundable.</p>
             </div>
           </div>
         </>
       )}
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<div />} />
         <Route path="/discover" element={<Discover />} />
         <Route path="/plans" element={<UpgradePage />} />
-        <Route path="/profile" element={<Profile user={user} onLogout={() => alert("Logout")} />} />
+        <Route path="/profile" element={<Profile user={user} />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/call" element={<Room />} />
       </Routes>
