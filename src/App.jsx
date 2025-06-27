@@ -24,6 +24,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [gender, setGender] = useState("any");
   const [country, setCountry] = useState("any");
+  const [message, setMessage] = useState("");
 
   const email = "user@example.com";
 
@@ -55,6 +56,7 @@ function App() {
       }).then(res => setUser({ ...user, coins: res.data.coins }));
     }
 
+    setMessage("🔗 Connecting to match...");
     navigate(`/call?gender=${gender}&country=${country}`);
   };
 
@@ -144,7 +146,7 @@ function App() {
                   display: "inline-block",
                   fontSize: "0.95rem"
                 }}>
-                  💬 {cameraAllowed === false ? "Camera blocked..." : "Waiting for message..."}
+                  💬 {message || (cameraAllowed === false ? "Camera blocked..." : "Waiting for message...")}
                 </div>
               </div>
             </>
