@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-const SIGNAL_SERVER = "ws://localhost:8080"; // Replace with your deployed WebSocket server URL
+const SIGNAL_SERVER = "wss://winkly-signal-server.onrender.com"; // ✅ Your live WebSocket signaling server
 
 export default function Room() {
   const [search] = useSearchParams();
@@ -27,33 +27,43 @@ export default function Room() {
   }, []);
 
   const init = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    localStream.current = stream;
-    if (localRef.current) {
-      localRef.current.srcObject = stream;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      localStream.current = stream;
+      if (localRef.current) {
+        localRef.current.srcObject = stream;
+      }
+
+      socketRef.current = new WebSocket(SIGNAL_SERVER);
+
+      socketRef.current.onopen = () => {
+        socketRef.current.send(JSON.stringify({ type: "join", gender, country }));
+      };
+
+      socketRef.current.onmessage = async (msg) => {
+        const data = JSON.parse(msg.data);
+
+        if (data.type === "matched") {
+          partnerId.current = data.partnerId;
+          createPeer(true);
+          setMessage("✅ Connected to user " + data.partnerId);
+          setLoading(false);
+        }
+
+        if (data.type === "signal") {
+          if (!peerRef.current) createPeer(false);
+          await peerRef.current.signal(data.data);
+        }
+
+        if (data.type === "nomatch") {
+          setMessage("❌ No users available, showing fake user...");
+          setLoading(false);
+        }
+      };
+    } catch (err) {
+      console.error("❌ Camera/mic permission denied:", err);
+      setMessage("🚫 Cannot access camera or mic.");
     }
-
-    socketRef.current = new WebSocket(SIGNAL_SERVER);
-
-    socketRef.current.onopen = () => {
-      socketRef.current.send(JSON.stringify({ type: "join", gender, country }));
-    };
-
-    socketRef.current.onmessage = async (msg) => {
-      const data = JSON.parse(msg.data);
-
-      if (data.type === "matched") {
-        partnerId.current = data.partnerId;
-        createPeer(true);
-        setMessage("✅ Connected to user " + data.partnerId);
-        setLoading(false);
-      }
-
-      if (data.type === "signal") {
-        if (!peerRef.current) createPeer(false);
-        await peerRef.current.signal(data.data);
-      }
-    };
   };
 
   const createPeer = (initiator) => {
