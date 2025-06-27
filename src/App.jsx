@@ -55,13 +55,11 @@ function App() {
       }).then(res => setUser({ ...user, coins: res.data.coins }));
     }
 
-    const callURL = `https://winkly-frontend-fmax.vercel.app/call?gender=${gender}&country=${country}`;
-    window.open(callURL, "_blank");
+    navigate(`/call?gender=${gender}&country=${country}`);
   };
 
   return (
     <div className="winkly">
-      {/* Sidebar */}
       {!isRoom && (
         <div className="sidebar">
           <button onClick={() => navigate("/")}><FaHome size={20} color="#000" /></button>
@@ -72,7 +70,6 @@ function App() {
         </div>
       )}
 
-      {/* Main Panel */}
       {!isRoom && (
         <div className="main-panel">
           {isHome && (
@@ -147,7 +144,7 @@ function App() {
                   display: "inline-block",
                   fontSize: "0.95rem"
                 }}>
-                  💬 Waiting for message...
+                  💬 {cameraAllowed === false ? "Camera blocked..." : "Waiting for message..."}
                 </div>
               </div>
             </>
@@ -163,7 +160,7 @@ function App() {
         <Route path="/" element={<div />} />
         <Route path="/discover" element={<div />} />
         <Route path="/plans" element={<div />} />
-        <Route path="/profile" element={<div />} />
+        <Route path="/profile" element={<Profile user={user} />} />
         <Route path="/call" element={<Room />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
