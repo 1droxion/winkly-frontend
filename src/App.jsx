@@ -25,6 +25,7 @@ function App() {
   const [country, setCountry] = useState("any");
   const [message, setMessage] = useState("");
   const [showVIPPopup, setShowVIPPopup] = useState(false);
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("winkly_user");
@@ -53,6 +54,25 @@ function App() {
     setMessage("🔗 Connecting to match...");
     navigate(`/call?gender=${gender}&country=${country}`);
   };
+
+  const renderPolicyFooter = () => (
+    <div style={{ marginTop: 40, fontSize: "0.85rem", color: "#aaa", textAlign: "center" }}>
+      <p><strong>Terms of Service:</strong> You must be 18+ to use this platform. Harassment, nudity, or abuse is banned.</p>
+      <p><strong>Privacy Policy:</strong> We only store essential data to run the platform. We don’t sell or share personal info.</p>
+      <p><strong>No Refund Policy:</strong> All payments (VIP, Coins, Gifts) are final and non-refundable.</p>
+    </div>
+  );
+
+  if (!ageConfirmed) {
+    return (
+      <div style={{ textAlign: "center", paddingTop: "20vh" }}>
+        <h2 style={{ color: "#ffd700", fontSize: "2rem" }}>🔞 Are you 18 or older?</h2>
+        <div style={{ marginTop: 20 }}>
+          <button onClick={() => setAgeConfirmed(true)} style={{ padding: "10px 20px", fontSize: "1rem", background: "#ffd700", border: "none", borderRadius: 10 }}>Yes, Enter</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="winkly">
@@ -148,6 +168,8 @@ function App() {
 
           {isPlans && <UpgradePage />}
           {isDiscover && <Discover gender={gender} country={country} />}
+
+          {renderPolicyFooter()}
         </div>
       )}
 
