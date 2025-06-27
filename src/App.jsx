@@ -9,6 +9,7 @@ import UpgradePage from "./UpgradePage";
 import Room from "./Room";
 import VIPPopup from "./VIPPopup";
 import Login from "./Login";
+import Landing from "./Landing";
 
 function App() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ function App() {
   const isHome = location.pathname === "/";
   const isDiscover = location.pathname === "/discover";
   const isPlans = location.pathname === "/plans";
+  const isAbout = location.pathname === "/about";
 
   const [cameraAllowed, setCameraAllowed] = useState(null);
   const [user, setUser] = useState(null);
@@ -67,7 +69,7 @@ function App() {
     <div className="winkly">
       {showVIPPopup && <VIPPopup onClose={() => setShowVIPPopup(false)} />}
 
-      {!isRoom && (
+      {!isRoom && !isAbout && (
         <div className="sidebar">
           <button onClick={() => navigate("/")}><FaHome size={20} color="#000" /></button>
           <button onClick={() => navigate("/discover")}><GiPartyPopper size={20} color="#000" /></button>
@@ -75,7 +77,7 @@ function App() {
         </div>
       )}
 
-      {!isRoom && (
+      {!isRoom && !isAbout && (
         <div className="main-panel">
           {isHome && (
             <>
@@ -162,12 +164,15 @@ function App() {
         </div>
       )}
 
+      {isAbout && <Landing />}
+
       <Routes>
         <Route path="/" element={<div />} />
         <Route path="/discover" element={<div />} />
         <Route path="/plans" element={<div />} />
         <Route path="/call" element={<Room />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/about" element={<Landing />} />
       </Routes>
     </div>
   );
