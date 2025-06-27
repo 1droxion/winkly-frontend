@@ -12,7 +12,7 @@ import UpgradePage from "./UpgradePage";
 import AgeGate from "./AgeGate";
 import Room from "./Room";
 
-const Home = () => <h2>🏠 Welcome to Winkly</h2>;
+const Home = () => <h2>Welcome to Winkly</h2>;
 
 function App() {
   const navigate = useNavigate();
@@ -20,9 +20,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [gender, setGender] = useState("any");
   const [country, setCountry] = useState("any");
-  const [bot, setBot] = useState(null);
-
-  const email = "user@example.com"; // replace with real session later
+  const email = "user@example.com";
   const isRoomRoute = window.location.pathname === "/call";
 
   useEffect(() => {
@@ -54,20 +52,7 @@ function App() {
   };
 
   const handleSkip = () => {
-    axios.get("https://winkly-backend.onrender.com/fake-users")
-      .then(res => {
-        const bots = res.data;
-        const random = bots[Math.floor(Math.random() * bots.length)];
-        setBot(random);
-      })
-      .catch(() => {
-        setBot({
-          name: "Luna",
-          country: "IN",
-          gender: "girl",
-          photo: "https://randomuser.me/api/portraits/women/5.jpg"
-        });
-      });
+    alert("⏭️ Skipping to next match...");
   };
 
   return (
@@ -75,55 +60,44 @@ function App() {
       <AgeGate />
 
       {!isRoomRoute && (
-        <div className="topbar" style={{ background: "#ffcc70", padding: "10px 0", display: "flex", justifyContent: "center", gap: 16 }}>
-          <button onClick={() => navigate("/")} title="Home"><FaHome /></button>
-          <button onClick={() => navigate("/discover")} title="Discover"><GiPartyPopper /></button>
-          <button onClick={() => navigate("/plans")} title="Plans"><FaGem /></button>
-          <button onClick={() => navigate("/profile")} title="Profile"><FaUserTie /></button>
-          <button onClick={() => navigate("/admin")} title="Admin"><FaChartBar /></button>
+        <div className="topbar" style={{ background: "#ffcc70", padding: "15px", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+          <button onClick={() => navigate("/")}><FaHome color="#000" /></button>
+          <button onClick={() => navigate("/discover")}><GiPartyPopper color="#000" /></button>
+          <button onClick={() => navigate("/plans")}><FaGem color="#000" /></button>
+          <button onClick={() => navigate("/profile")}><FaUserTie color="#000" /></button>
+          <button onClick={() => navigate("/admin")}><FaChartBar color="#000" /></button>
+
+          <select value={gender} onChange={(e) => setGender(e.target.value)} style={{ padding: "6px 10px", borderRadius: "8px" }}>
+            <option value="any">Any Gender</option>
+            <option value="boy">Boy</option>
+            <option value="girl">Girl</option>
+          </select>
+
+          <select value={country} onChange={(e) => setCountry(e.target.value)} style={{ padding: "6px 10px", borderRadius: "8px" }}>
+            <option value="any">Any Country</option>
+            <option value="us">USA</option>
+            <option value="in">India</option>
+            <option value="br">Brazil</option>
+            <option value="ru">Russia</option>
+            <option value="mx">Mexico</option>
+          </select>
+
+          <button style={{ background: "#000", color: "#fff", padding: "8px 15px", borderRadius: "10px", border: "none" }} onClick={handleConnect}>Connect</button>
+          <button style={{ background: "#000", color: "#fff", padding: "8px 15px", borderRadius: "10px", border: "none" }} onClick={handleSkip}>Skip</button>
         </div>
       )}
 
       {!isRoomRoute && (
         <>
-          <h1>Winkly ★</h1>
-          {user && <p>💰 Coins: {user.coins} {user.vip && "(VIP 💫 Unlimited)"}</p>}
+          <h1 style={{ marginTop: 30 }}>Winkly ★</h1>
+          {user && <p>💰 Coins: {user.coins} {user.vip && "(VIP 🔥 Unlimited)"}</p>}
 
           <div className="video-box">
             {cameraAllowed === false ? (
-              <p className="error">🛘 Camera access denied. Please allow camera in browser settings.</p>
+              <p className="error">🚫 Camera access denied. Please allow camera in browser settings.</p>
             ) : (
               <video autoPlay muted playsInline className="preview"></video>
             )}
-          </div>
-
-          {bot && (
-            <div className="bot-preview">
-              <img src={bot.photo} alt="bot" width="80" style={{ borderRadius: "50%" }} />
-              <p><strong>{bot.name}</strong> ({bot.gender}, {bot.country})</p>
-            </div>
-          )}
-
-          <div className="selectors">
-            <select value={gender} onChange={(e) => setGender(e.target.value)}>
-              <option value="any">Any Gender</option>
-              <option value="boy">Boy</option>
-              <option value="girl">Girl</option>
-            </select>
-
-            <select value={country} onChange={(e) => setCountry(e.target.value)}>
-              <option value="any">Any Country</option>
-              <option value="us">🇺🇸 USA</option>
-              <option value="in">🇮🇳 India</option>
-              <option value="br">🇧🇷 Brazil</option>
-              <option value="ru">🇷🇺 Russia</option>
-              <option value="mx">🇲🇽 Mexico</option>
-            </select>
-          </div>
-
-          <div className="actions">
-            <button className="connect" onClick={handleConnect}>🔗 Connect</button>
-            <button className="skip" onClick={handleSkip}>⏭️ Skip</button>
           </div>
         </>
       )}
