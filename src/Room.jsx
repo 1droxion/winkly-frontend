@@ -1,115 +1,63 @@
+// src/Room.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import fakeUsers from "./fakeUsers";
 
-export default function Room() {
+function Room() {
   const [search] = useSearchParams();
   const gender = search.get("gender") || "any";
   const country = search.get("country") || "any";
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+  const [match, setMatch] = useState(null);
   const videoRef = useRef();
   const [cameraAllowed, setCameraAllowed] = useState(null);
-  const [micOn, setMicOn] = useState(true);
-  const [camOn, setCamOn] = useState(true);
 
   useEffect(() => {
-    const getStream = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    // Start camera
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(stream => {
         videoRef.current.srcObject = stream;
         setCameraAllowed(true);
+      })
+      .catch(() => setCameraAllowed(false));
 
-        const timer = setTimeout(() => {
-          alert("Auto-skipping to next match...");
-          window.location.reload();
-        }, 20000);
+    // Find fake match
+    const filtered = fakeUsers.filter(u => {
+      const genderMatch = gender === "any" || u.gender === gender;
+      const countryMatch = country === "any" || u.country === country;
+      return genderMatch && countryMatch;
+    });
 
-        return () => clearTimeout(timer);
-      } catch {
-        setCameraAllowed(false);
-      }
-    };
-    getStream();
-  }, []);
-
-  const handleSend = () => {
-    if (!input.trim()) return;
-    setMessages(prev => [...prev, { from: "You", text: input }]);
-    setInput("");
-  };
-
-  const toggleMic = () => {
-    const stream = videoRef.current?.srcObject;
-    if (stream) {
-      stream.getAudioTracks().forEach(track => (track.enabled = !micOn));
-      setMicOn(prev => !prev);
+    if (filtered.length > 0) {
+      const random = filtered[Math.floor(Math.random() * filtered.length)];
+      setMatch(random);
+    } else {
+      setMatch({ name: "Unknown", country: "any", photo: "https://i.imgur.com/7fFXSgv.jpg" });
     }
-  };
-
-  const toggleCam = () => {
-    const stream = videoRef.current?.srcObject;
-    if (stream) {
-      stream.getVideoTracks().forEach(track => (track.enabled = !camOn));
-      setCamOn(prev => !prev);
-    }
-  };
+  }, [gender, country]);
 
   return (
-    <div style={{ display: "flex", height: "100vh", overflow: "hidden", background: "#000", color: "#fff" }}>
-      {/* Sidebar */}
-      <div style={{ width: 80, background: "#ffcc70", display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 20 }}>
-        <button onClick={() => window.location.href = "/"} style={{ margin: 10 }}>🏠</button>
-        <button onClick={toggleMic} style={{ margin: 10 }}>{micOn ? "🎙️" : "🔇"}</button>
-        <button onClick={toggleCam} style={{ margin: 10 }}>{camOn ? "📹" : "🚫"}</button>
-        <button onClick={() => window.location.href = "/profile"} style={{ margin: 10 }}>👤</button>
-      </div>
+    <div style={{ padding: 20, textAlign: "center", background: "#111", color: "#fff", height: "100vh" }}>
+      <h2 style={{ color: "#ffcc70", marginBottom: "20px" }}>🎥 Connected to:</h2>
 
-      {/* Main Area */}
-      <div style={{ flex: 1, padding: 20, overflow: "hidden" }}>
-        <h2>Matched with: <span style={{ color: "#ffcc70" }}>{gender.toUpperCase()} from {country.toUpperCase()}</span></h2>
-
-        <div style={{ display: "flex", gap: 20, height: "calc(100% - 80px)" }}>
-          {/* Camera */}
-          <div style={{ flex: 1 }}>
-            {cameraAllowed === false ? (
-              <p style={{ color: "red" }}>🚫 Camera access denied. Please allow camera access in your browser settings.</p>
-            ) : (
-              <video
-                ref={videoRef}
-                autoPlay
-                muted
-                playsInline
-                style={{ width: "100%", height: "100%", borderRadius: 16, border: "3px solid #ffcc70", objectFit: "cover" }}
-              />
-            )}
-          </div>
-
-          {/* Chat Box */}
-          <div style={{ width: 300, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            <div style={{ flex: 1, overflowY: "auto", background: "#111", padding: 10, borderRadius: 8 }}>
-              {messages.map((msg, i) => (
-                <p key={i} style={{ margin: "5px 0" }}><strong>{msg.from}:</strong> {msg.text}</p>
-              ))}
-            </div>
-
-            <div style={{ display: "flex", marginTop: 10 }}>
-              <input
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && handleSend()}
-                placeholder="Type message..."
-                style={{ flex: 1, padding: 10, borderRadius: 8, border: "1px solid #555" }}
-              />
-              <button
-                onClick={handleSend}
-                style={{ marginLeft: 10, padding: "10px 20px", borderRadius: 8, background: "#ffcc70", color: "#000", border: "none" }}
-              >
-                Send
-              </button>
-            </div>
-          </div>
+      {match && (
+        <div style={{ marginBottom: 20 }}>
+          <img src={match.photo} alt={match.name} style={{ width: 140, height: 140, borderRadius: "50%", objectFit: "cover" }} />
+          <h3>{match.name}</h3>
+          <p>{match.country.toUpperCase()}</p>
         </div>
+      )}
+
+      {cameraAllowed === false ? (
+        <p className="error">🚫 Camera access denied.</p>
+      ) : (
+        <video ref={videoRef} autoPlay muted playsInline style={{ width: "100%", maxWidth: 480, borderRadius: 16, background: "#000" }} />
+      )}
+
+      <div style={{ marginTop: 30, color: "#aaa", fontSize: "0.9rem" }}>
+        <p>This is a fake demo match. Real video calling logic can be integrated next.</p>
       </div>
     </div>
   );
 }
+
+export default Room;
