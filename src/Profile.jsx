@@ -4,8 +4,8 @@ import React from "react";
 function Profile({ user, onLogout }) {
   if (!user) {
     return (
-      <div style={{ textAlign: "center", paddingTop: "80px" }}>
-        <h2>Loading profile...</h2>
+      <div className="main-panel" style={{ textAlign: "center", paddingTop: "80px" }}>
+        <h2 style={{ color: "#ffcc70" }}>Loading profile...</h2>
       </div>
     );
   }
