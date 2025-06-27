@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { FaHome, FaGem } from "react-icons/fa";
 import { GiPartyPopper } from "react-icons/gi";
-import axios from "axios";
 import "./App.css";
 
 import Discover from "./Discover";
@@ -41,16 +40,6 @@ function App() {
   }, []);
 
   const handleConnect = () => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-
-    if (!user.vip) {
-      setShowVIPPopup(true);
-      return;
-    }
-
     setMessage("🔗 Connecting to match...");
     navigate(`/call?gender=${gender}&country=${country}`);
   };
