@@ -56,28 +56,32 @@ function App() {
   };
 
   return (
-    <div className="winkly">
+    <div className="winkly" style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
       <AgeGate />
 
       {!isRoomRoute && (
         <>
-          <div style={{ textAlign: "center", paddingTop: 20 }}>
-            <h1 style={{ fontSize: "2rem", color: "#ffcc70" }}>Winkly Live ★</h1>
+          {/* Sidebar */}
+          <div style={{ width: 80, background: "#ffcc70", display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 20 }}>
+            <button onClick={() => navigate("/")}><FaHome color="#000" /></button>
+            <button onClick={() => navigate("/discover")}><GiPartyPopper color="#000" /></button>
+            <button onClick={() => navigate("/plans")}><FaGem color="#000" /></button>
+            <button onClick={() => navigate("/profile")}><FaUserTie color="#000" /></button>
+            <button onClick={() => navigate("/admin")}><FaChartBar color="#000" /></button>
+          </div>
 
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, flexWrap: "wrap", marginTop: 20 }}>
-              <button onClick={() => navigate("/")}><FaHome color="#000" /></button>
-              <button onClick={() => navigate("/discover")}><GiPartyPopper color="#000" /></button>
-              <button onClick={() => navigate("/plans")}><FaGem color="#000" /></button>
-              <button onClick={() => navigate("/profile")}><FaUserTie color="#000" /></button>
-              <button onClick={() => navigate("/admin")}><FaChartBar color="#000" /></button>
+          {/* Main Panel */}
+          <div style={{ flex: 1, padding: 20 }}>
+            <h1 style={{ fontSize: "2rem", color: "#ffcc70", marginBottom: 10 }}>Winkly Live ★</h1>
 
-              <select value={gender} onChange={(e) => setGender(e.target.value)} style={{ padding: "6px 12px", borderRadius: 10, background: "#000", color: "#fff" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>
+              <select value={gender} onChange={(e) => setGender(e.target.value)} style={{ padding: "8px 12px", borderRadius: 8, background: "#000", color: "#fff" }}>
                 <option value="any">Any Gender</option>
                 <option value="boy">Boy</option>
                 <option value="girl">Girl</option>
               </select>
 
-              <select value={country} onChange={(e) => setCountry(e.target.value)} style={{ padding: "6px 12px", borderRadius: 10, background: "#000", color: "#fff" }}>
+              <select value={country} onChange={(e) => setCountry(e.target.value)} style={{ padding: "8px 12px", borderRadius: 8, background: "#000", color: "#fff" }}>
                 <option value="any">Any Country</option>
                 <option value="us">USA</option>
                 <option value="in">India</option>
@@ -90,11 +94,11 @@ function App() {
               <button onClick={handleSkip} style={{ background: "#000", color: "#fff", padding: "8px 16px", borderRadius: 10, border: "none" }}>Skip</button>
             </div>
 
-            <div style={{ textAlign: "center", marginTop: 20 }}>
+            <div style={{ marginBottom: 20 }}>
               {user && <p>💰 Coins: {user.coins} {user.vip && "(VIP 🔥 Unlimited)"}</p>}
             </div>
 
-            <div className="video-box" style={{ marginTop: 20 }}>
+            <div className="video-box">
               {cameraAllowed === false ? (
                 <p className="error">🚫 Camera access denied. Please allow camera in browser settings.</p>
               ) : (
@@ -102,11 +106,11 @@ function App() {
               )}
             </div>
 
-            <footer style={{ marginTop: 40, fontSize: "0.85rem", color: "#aaa", textAlign: "center" }}>
+            <div style={{ marginTop: 40, fontSize: "0.85rem", color: "#aaa", textAlign: "center" }}>
               <p><strong>Terms of Service:</strong> You must be 18+ to use this platform. Harassment, nudity, or abuse is banned.</p>
               <p><strong>Privacy Policy:</strong> We only store essential data to run the platform. We don’t sell or share personal info.</p>
               <p><strong>No Refund Policy:</strong> All payments (VIP, Coins, Gifts) are final and non-refundable.</p>
-            </footer>
+            </div>
           </div>
         </>
       )}
