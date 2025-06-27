@@ -13,8 +13,17 @@ export default function Room() {
   const [cameraOn, setCameraOn] = useState(true);
   const [micOn, setMicOn] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [fakeUser, setFakeUser] = useState(0);
 
   const videoRef = useRef();
+
+  const fakeUsers = [
+    { name: "Sofia from Brazil", message: "Hi there 👋" },
+    { name: "Emma from USA", message: "Hey 👀" },
+    { name: "Liam from India", message: "What's up?" },
+    { name: "Lucas from Russia", message: "Hello 😄" },
+    { name: "Olivia from Mexico", message: "Nice to meet you!" },
+  ];
 
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -34,11 +43,14 @@ export default function Room() {
 
   const handleSkip = () => {
     setLoading(true);
+    setMessage("🔄 Searching new match...");
     setTimeout(() => {
-      setMessages([]);
-      setMessage("🔗 Connected to new match!");
+      const next = (fakeUser + 1) % fakeUsers.length;
+      setFakeUser(next);
+      setMessages([{ sender: fakeUsers[next].name, text: fakeUsers[next].message }]);
+      setMessage("Connected to " + fakeUsers[next].name);
       setLoading(false);
-    }, 2000);
+    }, 1500);
   };
 
   const toggleCamera = () => {
@@ -57,7 +69,7 @@ export default function Room() {
     <div style={{ padding: 20, textAlign: "center" }}>
       <h1 style={{ fontSize: "2rem", color: "#ffd700", marginBottom: 20 }}>Winkly Live ★</h1>
 
-      <div style={{ display: "flex", justifyContent: "center", gap: 10, marginBottom: 20 }}>
+      <div style={{ display: "flex", justifyContent: "center", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
         <button onClick={toggleCamera} style={{ padding: "10px 16px", borderRadius: 10, background: cameraOn ? "#ffd700" : "#999", border: "none" }}>
           {cameraOn ? "Turn Off Camera" : "Turn On Camera"}
         </button>
@@ -71,13 +83,15 @@ export default function Room() {
         <div style={{ color: "#ccc", padding: 40 }}>🔄 Loading next match...</div>
       ) : (
         <>
-          <video ref={videoRef} autoPlay playsInline muted style={{
-            width: "100%",
-            maxWidth: 480,
-            borderRadius: 16,
-            border: "3px solid #ffd700",
-            boxShadow: "0 0 20px #ffd700aa"
-          }} />
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <video ref={videoRef} autoPlay playsInline muted style={{
+              width: "100%",
+              maxWidth: 480,
+              borderRadius: 16,
+              border: "3px solid #ffd700",
+              boxShadow: "0 0 20px #ffd700aa"
+            }} />
+          </div>
 
           <p style={{ marginTop: 20, fontWeight: "bold", color: "#ccc" }}>
             Matched with: <span style={{ color: "#ffd700" }}>{gender.toUpperCase()}</span> from <span style={{ color: "#ffd700" }}>{country.toUpperCase()}</span>
