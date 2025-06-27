@@ -12,7 +12,7 @@ import UpgradePage from "./UpgradePage";
 import AgeGate from "./AgeGate";
 import Room from "./Room";
 
-const Home = () => <h2>Welcome to Winkly</h2>;
+const Home = () => <></>;
 
 function App() {
   const navigate = useNavigate();
@@ -102,6 +102,12 @@ function App() {
               <video autoPlay muted playsInline className="preview"></video>
             )}
           </div>
+
+          <footer style={{ marginTop: 40, fontSize: "0.85rem", color: "#aaa", textAlign: "center" }}>
+            <p><strong>Terms of Service:</strong> You must be 18+ to use this platform. Harassment, nudity, or abuse is banned.</p>
+            <p><strong>Privacy Policy:</strong> We only store essential data to run the platform. We don’t sell or share personal info.</p>
+            <p><strong>No Refund Policy:</strong> All payments (VIP, Coins, Gifts) are final and non-refundable.</p>
+          </footer>
         </>
       )}
 
