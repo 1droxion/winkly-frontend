@@ -1,57 +1,67 @@
-// src/Room.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import fakeUsers from "./fakeUsers";
 
-function Room() {
+export default function Room() {
   const [search] = useSearchParams();
   const gender = search.get("gender") || "any";
   const country = search.get("country") || "any";
-  const [match, setMatch] = useState(null);
+
+  const [message, setMessage] = useState("Waiting for message...");
+  const [stream, setStream] = useState(null);
+  const [connected, setConnected] = useState(false);
+
   const videoRef = useRef();
-  const [cameraAllowed, setCameraAllowed] = useState(null);
 
   useEffect(() => {
-    // Start camera
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then(stream => {
+        setStream(stream);
         videoRef.current.srcObject = stream;
-        setCameraAllowed(true);
+        setMessage("🔗 Connected to match!");
+        setConnected(true);
       })
-      .catch(() => setCameraAllowed(false));
-
-    // Pick a fake user
-    const filtered = fakeUsers.filter(u => {
-      const genderMatch = gender === "any" || u.gender === gender;
-      const countryMatch = country === "any" || u.country === country;
-      return genderMatch && countryMatch;
-    });
-
-    if (filtered.length > 0) {
-      const random = filtered[Math.floor(Math.random() * filtered.length)];
-      setMatch(random);
-    }
-  }, [gender, country]);
+      .catch(() => {
+        setMessage("🚫 Camera access denied");
+        setConnected(false);
+      });
+  }, []);
 
   return (
-    <div style={{ padding: 20, textAlign: "center", background: "#111", color: "#fff", height: "100vh" }}>
-      <h2 style={{ color: "#ffcc70", marginBottom: "20px" }}>🎥 Connected to:</h2>
+    <div style={{ padding: 20, textAlign: "center" }}>
+      <h1 style={{ fontSize: "2rem", color: "#ffd700", marginBottom: 20 }}>Winkly Live ★</h1>
 
-      {match && (
-        <div style={{ marginBottom: 20 }}>
-          <img src={match.photo} alt={match.name} style={{ width: 140, height: 140, borderRadius: "50%", objectFit: "cover" }} />
-          <h3>{match.name}</h3>
-          <p>{match.country.toUpperCase()}</p>
-        </div>
-      )}
+      <div style={{ display: "flex", justifyContent: "center", gap: 10, marginBottom: 20 }}>
+        <select value={gender} disabled style={{ padding: 10, borderRadius: 8 }}>
+          <option>{gender}</option>
+        </select>
+        <select value={country} disabled style={{ padding: 10, borderRadius: 8 }}>
+          <option>{country}</option>
+        </select>
+        <button style={{ padding: "10px 20px", background: "#ffd700", border: "none", borderRadius: 10 }}>Connect</button>
+      </div>
 
-      {cameraAllowed === false ? (
-        <p className="error">🚫 Camera access denied.</p>
-      ) : (
-        <video ref={videoRef} autoPlay muted playsInline style={{ width: "100%", maxWidth: 480, borderRadius: 16, background: "#000" }} />
-      )}
+      <video ref={videoRef} autoPlay playsInline muted style={{
+        width: "100%",
+        maxWidth: 480,
+        borderRadius: 16,
+        border: "3px solid #ffd700",
+        boxShadow: "0 0 20px #ffd700aa"
+      }} />
+
+      <p style={{ marginTop: 20, fontWeight: "bold", color: "#ccc" }}>
+        Matched with: <span style={{ color: "#ffd700" }}>{gender.toUpperCase()}</span> from <span style={{ color: "#ffd700" }}>{country.toUpperCase()}</span>
+      </p>
+
+      <div style={{
+        marginTop: 16,
+        background: "#222",
+        color: "#ccc",
+        padding: "10px 16px",
+        borderRadius: 10,
+        display: "inline-block"
+      }}>
+        💬 {message}
+      </div>
     </div>
   );
 }
-
-export default Room;
