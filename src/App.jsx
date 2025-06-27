@@ -113,14 +113,6 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/call" element={<Room />} />
       </Routes>
-
-      {!isRoomRoute && (
-        <footer style={{ marginTop: 50, padding: 20, fontSize: "0.85rem", color: "#aaa", textAlign: "center" }}>
-          <p><strong>Terms of Service:</strong> You must be 18+ to use this platform. Harassment, nudity, or abuse is banned.</p>
-          <p><strong>Privacy Policy:</strong> We only store essential data to run the platform. We don’t sell or share personal info.</p>
-          <p><strong>No Refund Policy:</strong> All payments (VIP, Coins, Gifts) are final and non-refundable.</p>
-        </footer>
-      )}
     </div>
   );
 }
