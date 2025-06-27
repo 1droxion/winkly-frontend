@@ -18,7 +18,6 @@ function App() {
   const isHome = location.pathname === "/";
   const isDiscover = location.pathname === "/discover";
   const isPlans = location.pathname === "/plans";
-  const isProfile = location.pathname === "/profile";
 
   const [cameraAllowed, setCameraAllowed] = useState(null);
   const [user, setUser] = useState(null);
@@ -153,7 +152,6 @@ function App() {
           )}
 
           {isPlans && <UpgradePage />}
-          {isProfile && <Profile user={user} />}
           {isDiscover && <Discover gender={gender} country={country} />}
         </div>
       )}
