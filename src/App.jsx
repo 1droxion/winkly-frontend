@@ -10,6 +10,8 @@ import Profile from "./Profile";
 import Admin from "./Admin";
 import UpgradePage from "./UpgradePage";
 import Room from "./Room";
+import VIPPopup from "./VIPPopup";
+import Login from "./Login";
 
 function App() {
   const navigate = useNavigate();
@@ -24,10 +26,12 @@ function App() {
   const [gender, setGender] = useState("any");
   const [country, setCountry] = useState("any");
   const [message, setMessage] = useState("");
-
-  const email = "user@example.com";
+  const [showVIPPopup, setShowVIPPopup] = useState(false);
 
   useEffect(() => {
+    const stored = localStorage.getItem("winkly_user");
+    if (stored) setUser(JSON.parse(stored));
+
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then(stream => {
         setCameraAllowed(true);
@@ -35,24 +39,17 @@ function App() {
         if (video) video.srcObject = stream;
       })
       .catch(() => setCameraAllowed(false));
-
-    axios.post("https://winkly-backend.onrender.com/get-user", { email })
-      .then(res => setUser(res.data.user))
-      .catch(() => alert("Failed to load user"));
   }, []);
 
   const handleConnect = () => {
-    if (!user) return;
-    if (!user.vip && user.coins <= 0) {
-      alert("❌ You need more coins. Please upgrade or buy more.");
+    if (!user) {
+      navigate("/login");
       return;
     }
 
     if (!user.vip) {
-      axios.post("https://winkly-backend.onrender.com/update-coins", {
-        email,
-        amount: -1
-      }).then(res => setUser({ ...user, coins: res.data.coins }));
+      setShowVIPPopup(true);
+      return;
     }
 
     setMessage("🔗 Connecting to match...");
@@ -61,6 +58,8 @@ function App() {
 
   return (
     <div className="winkly">
+      {showVIPPopup && <VIPPopup onClose={() => setShowVIPPopup(false)} />}
+
       {!isRoom && (
         <div className="sidebar">
           <button onClick={() => navigate("/")}><FaHome size={20} color="#000" /></button>
@@ -163,6 +162,7 @@ function App() {
         <Route path="/profile" element={<Profile user={user} />} />
         <Route path="/call" element={<Room />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </div>
   );
