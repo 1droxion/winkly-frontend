@@ -9,7 +9,6 @@ import Discover from "./Discover";
 import Profile from "./Profile";
 import Admin from "./Admin";
 import UpgradePage from "./UpgradePage";
-import AgeGate from "./AgeGate";
 import Room from "./Room";
 
 const Home = () => <></>;
@@ -20,6 +19,9 @@ function App() {
   const [user, setUser] = useState(null);
   const [gender, setGender] = useState("any");
   const [country, setCountry] = useState("any");
+  const [ageConfirmed, setAgeConfirmed] = useState(
+    localStorage.getItem("ageConfirmed") === "true"
+  );
   const email = "user@example.com";
   const isRoomRoute = window.location.pathname === "/call";
 
@@ -31,6 +33,17 @@ function App() {
     axios.post("https://winkly-backend.onrender.com/get-user", { email })
       .then(res => setUser(res.data.user))
       .catch(() => alert("Failed to load user"));
+
+    if (!ageConfirmed) {
+      const confirmed = window.confirm("This platform is for 18+ users only. Do you confirm you're over 18?");
+      if (confirmed) {
+        localStorage.setItem("ageConfirmed", "true");
+        setAgeConfirmed(true);
+      } else {
+        alert("You must be 18+ to access Winkly.");
+        window.location.href = "https://google.com";
+      }
+    }
   }, []);
 
   const handleConnect = () => {
@@ -57,21 +70,27 @@ function App() {
 
   return (
     <div className="winkly" style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
-      <AgeGate />
-
       {!isRoomRoute && (
         <>
-          {/* Sidebar */}
-          <div style={{ width: 80, background: "#ffcc70", display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 20 }}>
-            <button onClick={() => navigate("/")}><FaHome color="#000" /></button>
-            <button onClick={() => navigate("/discover")}><GiPartyPopper color="#000" /></button>
-            <button onClick={() => navigate("/plans")}><FaGem color="#000" /></button>
-            <button onClick={() => navigate("/profile")}><FaUserTie color="#000" /></button>
-            <button onClick={() => navigate("/admin")}><FaChartBar color="#000" /></button>
+          {/* Sidebar on Left */}
+          <div style={{
+            width: 70,
+            background: "#ffcc70",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            paddingTop: 20,
+            gap: 20
+          }}>
+            <button onClick={() => navigate("/")}><FaHome size={20} color="#000" /></button>
+            <button onClick={() => navigate("/discover")}><GiPartyPopper size={20} color="#000" /></button>
+            <button onClick={() => navigate("/plans")}><FaGem size={20} color="#000" /></button>
+            <button onClick={() => navigate("/profile")}><FaUserTie size={20} color="#000" /></button>
+            <button onClick={() => navigate("/admin")}><FaChartBar size={20} color="#000" /></button>
           </div>
 
           {/* Main Panel */}
-          <div style={{ flex: 1, padding: 20 }}>
+          <div style={{ flex: 1, padding: 20, overflowY: "auto" }}>
             <h1 style={{ fontSize: "2rem", color: "#ffcc70", marginBottom: 10 }}>Winkly Live ★</h1>
 
             <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>
