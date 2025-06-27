@@ -4,15 +4,15 @@ import React from "react";
 function Profile({ user, onLogout }) {
   if (!user) {
     return (
-      <div className="main-panel" style={{ textAlign: "center", paddingTop: "80px" }}>
-        <h2 style={{ color: "#ffcc70" }}>Loading profile...</h2>
+      <div style={{ textAlign: "center", paddingTop: "80px" }}>
+        <h2 style={{ color: "#ffcc70", fontSize: "1.6rem" }}>Loading profile...</h2>
       </div>
     );
   }
 
   return (
-    <div className="main-panel" style={{ textAlign: "center", paddingTop: "40px", maxWidth: 600, margin: "0 auto" }}>
-      <h1 style={{ color: "#ffcc70", marginBottom: "20px" }}>👤 My Profile</h1>
+    <div style={{ textAlign: "center", padding: "40px 20px", maxWidth: 600, margin: "0 auto" }}>
+      <h1 style={{ color: "#ffcc70", marginBottom: "20px", fontSize: "2rem" }}>👤 My Profile</h1>
 
       <div style={{
         background: "rgba(255, 255, 255, 0.05)",
@@ -26,10 +26,9 @@ function Profile({ user, onLogout }) {
           style={{ width: 120, height: 120, borderRadius: "50%", marginBottom: 10 }}
         />
 
-        <h2 style={{ margin: "10px 0" }}>{user.email}</h2>
-
-        <p>💰 Coins: <strong>{user.coins}</strong></p>
-        <p>🔥 VIP: <strong>{user.vip ? "Yes ✅" : "No ❌"}</strong></p>
+        <h2 style={{ margin: "10px 0", fontSize: "1.2rem" }}>{user.email}</h2>
+        <p style={{ fontSize: "1rem", color: "#ccc" }}>💰 Coins: <strong>{user.coins}</strong></p>
+        <p style={{ fontSize: "1rem", color: "#ccc" }}>🔥 VIP: <strong>{user.vip ? "Yes ✅" : "No ❌"}</strong></p>
 
         <button
           onClick={onLogout || (() => alert("Logged out!"))}
@@ -47,10 +46,10 @@ function Profile({ user, onLogout }) {
         </button>
       </div>
 
-      <div className="legal" style={{ marginTop: "40px" }}>
-        <p><strong>Terms of Service:</strong> You must be 18+ to use this platform.</p>
-        <p><strong>Privacy Policy:</strong> We don’t sell or share personal info.</p>
-        <p><strong>No Refund Policy:</strong> All payments are final and non-refundable.</p>
+      <div style={{ marginTop: "40px", fontSize: "0.85rem", color: "#aaa" }}>
+        <p><strong>Terms:</strong> 18+ required. No harassment or nudity allowed.</p>
+        <p><strong>Privacy:</strong> We don’t share personal data.</p>
+        <p><strong>No Refunds:</strong> All purchases are final.</p>
       </div>
     </div>
   );
