@@ -1,81 +1,83 @@
-// === Discover.jsx with gift buttons ===
+// src/Discover.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function Discover() {
-  const [girls, setGirls] = useState([]);
-  const [selected, setSelected] = useState(null);
-  const [user, setUser] = useState(null);
+const fakeUsers = [
+  { name: "Sofia", country: "us", photo: "https://i.imgur.com/7fFXSgv.jpg", gender: "girl" },
+  { name: "Aanya", country: "in", photo: "https://i.imgur.com/HGz5Z5A.jpg", gender: "girl" },
+  { name: "Luna", country: "br", photo: "https://i.imgur.com/ZkmFlj7.jpg", gender: "girl" },
+  { name: "Natasha", country: "ru", photo: "https://i.imgur.com/zURaKX9.jpg", gender: "girl" },
+  { name: "Camila", country: "mx", photo: "https://i.imgur.com/I3aZcMg.jpg", gender: "girl" },
+];
+
+function Discover({ gender, country }) {
+  const [online, setOnline] = useState([]);
 
   useEffect(() => {
-    fetch("/girls.json")
-      .then((res) => res.json())
-      .then((data) => setGirls(data));
+    // In real version, call your backend to fetch online users
+    axios.get("https://winkly-backend.onrender.com/online-users")
+      .then(res => {
+        let filtered = res.data.users || [];
 
-    const saved = localStorage.getItem("winkly_user");
-    if (saved) setUser(JSON.parse(saved));
-  }, []);
+        // Apply gender filter
+        if (gender !== "any") {
+          filtered = filtered.filter(u => u.gender === gender);
+        }
 
-  const sendGift = async (gift) => {
-    if (!user || !user.email) return alert("Please log in to send gifts.");
-    if (user.guest) return alert("Guests cannot send gifts.");
-    if (!selected || !selected.name) return;
+        // Apply country filter
+        if (country !== "any") {
+          filtered = filtered.filter(u => u.country === country);
+        }
 
-    const to = selected.name.toLowerCase() + "@demo.com"; // fake target email for demo
+        // If empty, show fallback
+        if (filtered.length === 0) {
+          filtered = fakeUsers.filter(u => {
+            const genderMatch = gender === "any" || u.gender === gender;
+            const countryMatch = country === "any" || u.country === country;
+            return genderMatch && countryMatch;
+          });
+        }
 
-    try {
-      const res = await axios.post("https://winkly-backend.onrender.com/send-gift", {
-        from: user.email,
-        to,
-        gift
+        setOnline(filtered);
+      })
+      .catch(() => {
+        // fallback to fake users if API fails
+        const fallback = fakeUsers.filter(u => {
+          const genderMatch = gender === "any" || u.gender === gender;
+          const countryMatch = country === "any" || u.country === country;
+          return genderMatch && countryMatch;
+        });
+        setOnline(fallback);
       });
-      alert(res.data.message || "Gift sent!");
-    } catch (err) {
-      alert("Failed to send gift");
-    }
-  };
+  }, [gender, country]);
 
   return (
-    <div className="app">
-      <h1 className="logo">💃 Discover Girls</h1>
+    <div style={{ textAlign: "center" }}>
+      <h1 style={{ color: "#ffcc70", marginBottom: 20 }}>🟢 Online Girls</h1>
 
       <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-        gap: "1rem",
-        marginTop: "1rem",
-        width: "100%"
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
+        gap: "20px"
       }}>
-        {girls.map((girl, idx) => (
-          <div key={idx} style={{
-            background: "rgba(255,255,255,0.08)",
-            borderRadius: "12px",
-            padding: "1rem",
+        {online.map((user, i) => (
+          <div key={i} style={{
+            background: "#1a1a1a",
+            borderRadius: "16px",
+            padding: "12px",
+            width: "160px",
             textAlign: "center",
-            cursor: "pointer"
-          }} onClick={() => setSelected(girl)}>
-            <img src={girl.image} alt={girl.name} style={{ width: "100%", borderRadius: "10px" }} />
-            <h3 style={{ marginTop: "0.5rem" }}>{girl.name}</h3>
-            <p>{girl.country}</p>
+            boxShadow: "0 0 10px rgba(0,0,0,0.5)"
+          }}>
+            <img src={user.photo} alt={user.name} style={{ width: "100%", borderRadius: "12px" }} />
+            <h3 style={{ margin: "10px 0 4px", fontSize: "1rem", color: "#fff" }}>{user.name}</h3>
+            <p style={{ color: "#bbb", fontSize: "0.9rem" }}>{user.country.toUpperCase()}</p>
           </div>
         ))}
       </div>
-
-      {selected && (
-        <div style={{ marginTop: "2rem", textAlign: "center" }}>
-          <h2>🎥 Preview: {selected.name}</h2>
-          <img src={selected.image} alt="preview" style={{ maxWidth: 200, borderRadius: 16 }} />
-          <p style={{ marginTop: 10 }}>{selected.country}</p>
-
-          <div className="btn-group" style={{ marginTop: 10 }}>
-            <button onClick={() => sendGift("rose")}>🌹 Rose</button>
-            <button onClick={() => sendGift("heart")}>❤️ Heart</button>
-            <button onClick={() => sendGift("diamond")}>💎 Diamond</button>
-          </div>
-
-          <button className="dropdown-btn" onClick={() => setSelected(null)} style={{ marginTop: 12 }}>❌ Close</button>
-        </div>
-      )}
     </div>
   );
 }
+
+export default Discover;
