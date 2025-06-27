@@ -20,7 +20,7 @@ function Room() {
       })
       .catch(() => setCameraAllowed(false));
 
-    // Find fake match
+    // Pick a fake user
     const filtered = fakeUsers.filter(u => {
       const genderMatch = gender === "any" || u.gender === gender;
       const countryMatch = country === "any" || u.country === country;
@@ -30,8 +30,6 @@ function Room() {
     if (filtered.length > 0) {
       const random = filtered[Math.floor(Math.random() * filtered.length)];
       setMatch(random);
-    } else {
-      setMatch({ name: "Unknown", country: "any", photo: "https://i.imgur.com/7fFXSgv.jpg" });
     }
   }, [gender, country]);
 
@@ -52,10 +50,6 @@ function Room() {
       ) : (
         <video ref={videoRef} autoPlay muted playsInline style={{ width: "100%", maxWidth: 480, borderRadius: 16, background: "#000" }} />
       )}
-
-      <div style={{ marginTop: 30, color: "#aaa", fontSize: "0.9rem" }}>
-        <p>This is a fake demo match. Real video calling logic can be integrated next.</p>
-      </div>
     </div>
   );
 }
