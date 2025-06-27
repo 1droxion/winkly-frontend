@@ -9,20 +9,50 @@ export default function Room() {
   const [input, setInput] = useState("");
   const videoRef = useRef();
   const [cameraAllowed, setCameraAllowed] = useState(null);
+  const [micOn, setMicOn] = useState(true);
+  const [camOn, setCamOn] = useState(true);
 
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then(stream => {
+    const getStream = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         videoRef.current.srcObject = stream;
         setCameraAllowed(true);
-      })
-      .catch(() => setCameraAllowed(false));
+
+        // Auto-skip after 20s
+        const timer = setTimeout(() => {
+          alert("Auto-skipping to next match...");
+          window.location.reload();
+        }, 20000);
+
+        return () => clearTimeout(timer);
+      } catch {
+        setCameraAllowed(false);
+      }
+    };
+    getStream();
   }, []);
 
   const handleSend = () => {
     if (!input.trim()) return;
     setMessages(prev => [...prev, { from: "You", text: input }]);
     setInput("");
+  };
+
+  const toggleMic = () => {
+    const stream = videoRef.current?.srcObject;
+    if (stream) {
+      stream.getAudioTracks().forEach(track => track.enabled = !micOn);
+      setMicOn(prev => !prev);
+    }
+  };
+
+  const toggleCam = () => {
+    const stream = videoRef.current?.srcObject;
+    if (stream) {
+      stream.getVideoTracks().forEach(track => track.enabled = !camOn);
+      setCamOn(prev => !prev);
+    }
   };
 
   return (
@@ -32,13 +62,23 @@ export default function Room() {
       {cameraAllowed === false ? (
         <p style={{ color: "red", marginBottom: 20 }}>🚫 Camera access denied. Please allow camera access in your browser settings.</p>
       ) : (
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          playsInline
-          style={{ width: "80%", maxWidth: 600, borderRadius: 16, border: "3px solid #ffcc70" }}
-        ></video>
+        <>
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            playsInline
+            style={{ width: "80%", maxWidth: 600, borderRadius: 16, border: "3px solid #ffcc70" }}
+          ></video>
+          <div style={{ marginTop: 10 }}>
+            <button onClick={toggleMic} style={{ margin: 5, padding: 10, borderRadius: 8, background: micOn ? "#ffcc70" : "#555", color: "#000" }}>
+              {micOn ? "Mute Mic" : "Unmute Mic"}
+            </button>
+            <button onClick={toggleCam} style={{ margin: 5, padding: 10, borderRadius: 8, background: camOn ? "#ffcc70" : "#555", color: "#000" }}>
+              {camOn ? "Turn Off Camera" : "Turn On Camera"}
+            </button>
+          </div>
+        </>
       )}
 
       <div style={{ marginTop: 20 }}>
