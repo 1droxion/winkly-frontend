@@ -29,7 +29,9 @@ export default function Room() {
   const init = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     localStream.current = stream;
-    localRef.current.srcObject = stream;
+    if (localRef.current) {
+      localRef.current.srcObject = stream;
+    }
 
     socketRef.current = new WebSocket(SIGNAL_SERVER);
 
@@ -71,7 +73,9 @@ export default function Room() {
     });
 
     peerRef.current.on("stream", (stream) => {
-      remoteRef.current.srcObject = stream;
+      if (remoteRef.current) {
+        remoteRef.current.srcObject = stream;
+      }
     });
 
     peerRef.current.on("close", () => {
