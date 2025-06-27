@@ -41,7 +41,7 @@ export default function Room() {
   const toggleMic = () => {
     const stream = videoRef.current?.srcObject;
     if (stream) {
-      stream.getAudioTracks().forEach(track => track.enabled = !micOn);
+      stream.getAudioTracks().forEach(track => (track.enabled = !micOn));
       setMicOn(prev => !prev);
     }
   };
@@ -49,13 +49,14 @@ export default function Room() {
   const toggleCam = () => {
     const stream = videoRef.current?.srcObject;
     if (stream) {
-      stream.getVideoTracks().forEach(track => track.enabled = !camOn);
+      stream.getVideoTracks().forEach(track => (track.enabled = !camOn));
       setCamOn(prev => !prev);
     }
   };
 
   return (
     <div style={{ display: "flex", height: "100vh", overflow: "hidden", background: "#000", color: "#fff" }}>
+      {/* Sidebar */}
       <div style={{ width: 80, background: "#ffcc70", display: "flex", flexDirection: "column", alignItems: "center", paddingTop: 20 }}>
         <button onClick={() => window.location.href = "/"} style={{ margin: 10 }}>🏠</button>
         <button onClick={toggleMic} style={{ margin: 10 }}>{micOn ? "🎙️" : "🔇"}</button>
@@ -63,13 +64,15 @@ export default function Room() {
         <button onClick={() => window.location.href = "/profile"} style={{ margin: 10 }}>👤</button>
       </div>
 
+      {/* Main Area */}
       <div style={{ flex: 1, padding: 20, overflow: "hidden" }}>
         <h2>Matched with: <span style={{ color: "#ffcc70" }}>{gender.toUpperCase()} from {country.toUpperCase()}</span></h2>
 
         <div style={{ display: "flex", gap: 20, height: "calc(100% - 80px)" }}>
+          {/* Camera */}
           <div style={{ flex: 1 }}>
             {cameraAllowed === false ? (
-              <p style={{ color: "red", marginBottom: 20 }}>🚫 Camera access denied. Please allow camera access in your browser settings.</p>
+              <p style={{ color: "red" }}>🚫 Camera access denied. Please allow camera access in your browser settings.</p>
             ) : (
               <video
                 ref={videoRef}
@@ -77,10 +80,11 @@ export default function Room() {
                 muted
                 playsInline
                 style={{ width: "100%", height: "100%", borderRadius: 16, border: "3px solid #ffcc70", objectFit: "cover" }}
-              ></video>
+              />
             )}
           </div>
 
+          {/* Chat Box */}
           <div style={{ width: 300, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <div style={{ flex: 1, overflowY: "auto", background: "#111", padding: 10, borderRadius: 8 }}>
               {messages.map((msg, i) => (
